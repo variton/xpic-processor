@@ -1,0 +1,43 @@
+# Doxyfile.in (Doxygen config template)
+
+PROJECT_NAME           = "pic-processor"
+PROJECT_NUMBER         = "0.0.1"
+#OUTPUT_DIRECTORY       = "@DOXYGEN_OUTPUT_DIR@"
+
+# Where your sources live
+INPUT                  = "/home/cxx-core/src" \
+                         "/home/cxx-core/include" \
+                         "/home/cxx-core/README.md" \ 
+                         "/home/cxx-core/docs/build.md" \
+                         "/home/cxx-core/docs/docker.md" \
+                         "/home/cxx-core/docs/tests.md" 
+
+RECURSIVE              = YES
+
+# Common C/C++ settings
+FILE_PATTERNS          = *.h *.hpp *.c *.cpp *.cc *.cxx *.md
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+
+# Generate HTML (most common)
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+
+# Optional: generate LaTeX/PDF
+GENERATE_LATEX         = NO
+
+# If you have Markdown docs
+MARKDOWN_SUPPORT       = YES
+# e.g. include a main page like README.md
+USE_MDFILE_AS_MAINPAGE = "@DOXYGEN_MAINPAGE@"
+# Optional: diagrams (requires Graphviz)
+HAVE_DOT               = @DOXYGEN_HAVE_DOT@
+DOT_GRAPH_MAX_NODES    = 100
+CALL_GRAPH             = NO
+CALLER_GRAPH           = NO
+
+# Output warnings to help improve docs
+WARN_IF_UNDOCUMENTED   = YES
+WARN_NO_PARAMDOC       = YES

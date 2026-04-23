@@ -1,0 +1,14 @@
+export LAB=/home/$INAME
+
+path_add() {
+  case ":$PATH:" in
+    *":$1:"*) ;;
+    *) PATH="$1:$PATH" ;;
+  esac
+}
+
+path_add /root/.local/bin
+path_add "$LAB"
+export PATH
+
+export LD_LIBRARY_PATH=/usr/local/lib

@@ -1,0 +1,5 @@
+add_subdirectory(platform)
+add_subdirectory(utils)
+add_subdirectory(fio)
+add_subdirectory(img)
+add_subdirectory(deinterlacer)
