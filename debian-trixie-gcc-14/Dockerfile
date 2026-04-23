@@ -23,6 +23,7 @@ RUN apt install -y clang-tidy
 RUN apt install -y clang-tools
 RUN apt install -y clang-format
 RUN apt install -y lcov
+RUN apt install -y git
 RUN apt install -y doctest
 RUN apt install -y doctest-dev
 RUN apt install -y libspdlog-dev
