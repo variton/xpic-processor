@@ -11,13 +11,13 @@ Prepare the docker image to develop and test pic-processor
 cd debian-trixie-gcc-14
 
 ```
-1. Generate the docker image
+#### Generate the docker image
 
 ```
 docker build -t izattoo:1.0 .
 
 ```
-2. Launch the docker container
+#### Launch the docker container
 *remark:*
     *execute the following command from the pic-processor root directory*
 
