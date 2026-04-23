@@ -25,7 +25,7 @@ in release:
 
 check the time to deinterlace the given image:
 ```
-time ./deinterlacer -i rc/interlaced.jpg -o output/deinterlaced.jpg
+time ./bin/deinterlacer -i rc/interlaced.jpg -o output/deinterlaced.jpg
 
 ```
 
