@@ -19,7 +19,7 @@ docker build -t izattoo:1.0 .
 ```
 #### Launch the docker container
 *remark:*
-    *execute the following command from the pic-processor root directory*
+    *execute the following command from the pic-processor directory*
 
 ```
 docker run --name=zattooc --hostname=cypher -v $PWD:/home/cxx-core --net=host --restart=no -it izattoo:1.0 /bin/bash
@@ -28,19 +28,13 @@ docker run --name=zattooc --hostname=cypher -v $PWD:/home/cxx-core --net=host --
 
 ### Environment to develop the pic-processor 
 
-#### Build & compile pic-processor 
+#### Build & compile pic-processor (Quick start)
 *remark:*
-    *execute the following command from the pic-processor root directory in the docker container*
+    *execute the following command from the /home/cxx-core directory in the docker container*
 
-in debug:
-
-```
-./build.sh debug
+execute the local C.I:
 
 ```
-in release:
-
-```
-./build.sh release
+./local-ci.sh
 
 ```
