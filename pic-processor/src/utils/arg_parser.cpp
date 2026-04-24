@@ -65,9 +65,9 @@ ArgParser::ArgParser(const std::string &app_name) noexcept
   // Additional help text shown at the bottom of CLI11 help/error output
   app_.footer(
       "Syntax:\n"
-      "  ./deinterlacer -i <input> -o <output>\n"
+      "  deinterlacer -i <input> -o <output>\n"
       "Example:\n"
-      "  ./deinterlacer -i rc/interlaced.jpg -o output/deinterlaced.jpg\n");
+      "  deinterlacer -i rc/interlaced.jpg -o output/deinterlaced.jpg\n");
 }
 
 /**
