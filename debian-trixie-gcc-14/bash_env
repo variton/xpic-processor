@@ -9,6 +9,8 @@ path_add() {
 
 path_add /root/.local/bin
 path_add "$LAB"
+path_add "$LAB/bin"
+
 export PATH
 
 export LD_LIBRARY_PATH=/usr/local/lib
