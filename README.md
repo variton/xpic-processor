@@ -22,7 +22,7 @@ docker build -t ixpic:1.0 .
     *execute the following command from the jpeg-processor directory*
 
 ```
-docker run --name=ixpicc --hostname=cypher -v $PWD:/home/cxx-core --net=host --restart=no -it ixpic:1.0 /bin/bash
+docker run --name=xpicc --hostname=cypher -v $PWD:/home/cxx-core --net=host --restart=no -it ixpic:1.0 /bin/bash
 
 ```
 
