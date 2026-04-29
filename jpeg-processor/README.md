@@ -1,4 +1,4 @@
-# Pic Processor
+# Jpeg Processor
 
 ## Quick Start
 1- Launch the docker container
