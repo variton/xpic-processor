@@ -1,4 +1,4 @@
-FROM debian:trixie
+FROM ubuntu:resolute 
 
 ENV INAME="cxx-core"
 
@@ -13,7 +13,6 @@ RUN apt install -y build-essential
 RUN apt install -y vim 
 RUN apt install -y doxygen
 RUN apt install -y graphviz
-RUN apt install -y gcc-14
 RUN apt install -y valgrind 
 RUN apt install -y heaptrack
 RUN apt install -y ninja-build
