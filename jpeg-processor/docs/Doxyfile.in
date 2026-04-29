@@ -1,6 +1,6 @@
 # Doxyfile.in (Doxygen config template)
 
-PROJECT_NAME           = "pic-processor"
+PROJECT_NAME           = "jpeg-processor"
 PROJECT_NUMBER         = "0.0.1"
 #OUTPUT_DIRECTORY       = "@DOXYGEN_OUTPUT_DIR@"
 

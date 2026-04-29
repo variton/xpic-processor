@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.31.6)
-project(pic-processor)
+project(jpeg-processor)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS_INIT "-Wall -Wno-overflow -pendantic -std=c++20")

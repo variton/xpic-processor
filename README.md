@@ -1,34 +1,34 @@
-# PicProcessor
-Cli and tools to process images files
+# Xpic-processor
+Cli and tools to process images files.
 A cpp wrapper around libjpeg to process images files.
-it is intended to provide a simple cli to deinterlace images
+It is intended to provide a simple cli to deinterlace images.
 
 ## Quick start
 ### Prepare environment
-Prepare the docker image to develop and test pic-processor
+Prepare the docker image to develop and test jpeg-processor
  
 ```
-cd debian-trixie-gcc-14
+cd ubuntu-resolute-gcc-15
 
 ```
 #### Generate the docker image
 
 ```
-docker build -t izattoo:1.0 .
+docker build -t ixpic:1.0 .
 
 ```
 #### Launch the docker container
 *remark:*
-    *execute the following command from the pic-processor directory*
+    *execute the following command from the jpeg-processor directory*
 
 ```
-docker run --name=zattooc --hostname=cypher -v $PWD:/home/cxx-core --net=host --restart=no -it izattoo:1.0 /bin/bash
+docker run --name=ixpicc --hostname=cypher -v $PWD:/home/cxx-core --net=host --restart=no -it ixpic:1.0 /bin/bash
 
 ```
 
-### Environment to develop the pic-processor 
+### Environment to develop the jpeg-processor 
 
-#### Build & compile pic-processor (Quick start)
+#### Build & compile jpeg-processor (Quick start)
 *remark:*
     *execute the following command from the /home/cxx-core directory in the docker container*
 
@@ -92,13 +92,13 @@ cd reports; ls
 
 
 read the reports and documentation:
-*remark:*
+*remark 2:*
     *open your browser and add the url of the different files*
 
 open the coverage tests:
 
 ```
-file:///<your path to the pic-processor folder>/reports/coverage_html/index.html
+file:///<your path to the jpeg-processor folder>/reports/coverage_html/index.html
 
 ``` 
 
@@ -106,7 +106,7 @@ file:///<your path to the pic-processor folder>/reports/coverage_html/index.html
 open the doxygen documentation:
 
 ```
-file:///<your path to the pic-processor folder>/reports/html/index.html
+file:///<your path to the jpeg-processor folder>/reports/html/index.html
 
 ``` 
 
@@ -114,7 +114,7 @@ file:///<your path to the pic-processor folder>/reports/html/index.html
 open the valgrind reports:
 
 ```
-file:///<your path to the pic-processor folder>/reports/valgrind-report.html
+file:///<your path to the jpeg-processor folder>/reports/valgrind-report.html
 
 ``` 
 
@@ -122,6 +122,6 @@ file:///<your path to the pic-processor folder>/reports/valgrind-report.html
 open the deinterlacer quality report[raw valgrind report]:
 
 ```
-file:///<your path to the pic-processor folder>/reports/deinterlacer-quality-report.log
+file:///<your path to the jpeg-processor folder>/reports/deinterlacer-quality-report.log
 
 ```
