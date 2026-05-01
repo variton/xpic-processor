@@ -40,6 +40,67 @@ JpegCompressor::~JpegCompressor() {
   jpeg_destroy_compress(&cinfo_);
 }
 
+tl::expected<void, JpegCompressorErrorInfo>
+JpegCompressor::init(FILE *outfp, const InputImg &inputimg,
+                     int quality) noexcept {
+  // libjpeg uses setjmp/longjmp for error handling
+  if (setjmp(err_.setjmp_buf))
+    return tl::unexpected(
+        JpegCompressorErrorInfo{JpegCompressorError::InitCompressionError,
+                                "JPEG compression init failed"});
+
+  jpeg_stdio_dest(&cinfo_, outfp);
+
+  // Configure output image parameters
+  cinfo_.image_width = static_cast<JDIMENSION>(inputimg.width);
+  cinfo_.image_height = static_cast<JDIMENSION>(inputimg.height);
+  cinfo_.input_components = inputimg.components;
+
+  // We already provide YCbCr data → no conversion needed
+  cinfo_.in_color_space = JCS_YCbCr;
+
+  // Set default compression parameters
+  jpeg_set_defaults(&cinfo_);
+
+  // Use provided quality if valid, otherwise fallback to default member value
+  jpeg_set_quality(&cinfo_, quality, TRUE);
+  return {};
+}
+
+// tl::expected<void, JpegCompressionErrorInfo> JpegCommpressor::init(FILE *
+// infp, const InputImg & inputimg) noexcept{
+//   // libjpeg uses setjmp/longjmp for error handling
+//   if (setjmp(err_.setjmp_buf))
+//     return tl::unexpected(
+//         JpegCompressionErrorInfo{JpegCompressorError::InitCompressionError,"JPEG
+//         compression init failed"});
+
+//   // Attach input file to decompressor
+//   jpeg_stdio_src(&cinfo_, infp);
+
+//   // Read JPEG header (metadata, dimensions, etc.)
+//   jpeg_read_header(&cinfo_, TRUE);
+
+//   // Force output to YCbCr:
+//   // libjpeg will convert automatically from source format (RGB, grayscale,
+//   // etc.)
+//   cinfo_.out_color_space = JCS_YCbCr;
+
+//   // Begin decompression
+//   jpeg_start_compress(&dec.cinfo());
+// }
+
+tl::expected<void, JpegCompressorErrorInfo>
+JpegCompressor::compress() noexcept {
+
+  jpeg_start_compress(&cinfo_, TRUE);
+
+  if (setjmp(err_.setjmp_buf))
+    return tl::unexpected(JpegCompressorErrorInfo{
+        JpegCompressorError::CompressionError, "JPEG compression failed"});
+  return {};
+}
+
 /**
  * Access the underlying libjpeg compression struct.
  *

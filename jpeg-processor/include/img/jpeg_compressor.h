@@ -2,8 +2,12 @@
 #ifndef JPEG_COMPRESSOR_H
 #define JPEG_COMPRESSOR_H
 
+#include <error_info.h>
+#include <errty.h>
+#include <inputimg.h>
 #include <jerr.h>
 #include <nc.h>
+#include <tl/expected.hpp>
 
 namespace img {
 
@@ -13,6 +17,15 @@ namespace img {
  * @tparam T Derived type.
  */
 template <typename T> using Movable = core::NC<T>;
+
+enum class JpegCompressorError {
+  InitCompressionError,
+  CompressionError,
+};
+
+using JpegCompressorErrorInfo = err::ErrorInfo<JpegCompressorError>;
+
+static_assert(topology::ErrorInfoTy<JpegCompressorErrorInfo>);
 
 /**
  * @brief RAII wrapper for libjpeg compression structures.
@@ -36,6 +49,10 @@ public:
    * @brief Destroys the compression object and releases resources.
    */
   ~JpegCompressor();
+
+  tl::expected<void, JpegCompressorErrorInfo>
+  init(FILE *outfp, const InputImg &inputimg, int quality) noexcept;
+  tl::expected<void, JpegCompressorErrorInfo> compress() noexcept;
 
   /**
    * @brief Access the underlying libjpeg compression structure.

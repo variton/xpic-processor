@@ -2,6 +2,7 @@
 
 #include <filehandler.h>
 #include <img_hdr.h>
+#include <inputimg.h>
 #include <jpeg_compressor.h>
 #include <jpeg_decompressor.h>
 
@@ -94,37 +95,25 @@ tl::expected<ImgDimension, ImageErrorInfo> ImgHdr::blend(int quality) noexcept {
   const int components = dec.cinfo().output_components; // usually 3 (Y, Cb, Cr)
   const int row_stride = width * components;            // bytes per scanline
 
+  InputImg inputimg{dec.cinfo()};
   // -----------------------------
   // Compressor setup & processing
   // -----------------------------
   JpegCompressor enc{};
 
-  // Error handling for compressor
-  if (setjmp(enc.err().setjmp_buf))
-    return tl::unexpected(
-        ImageErrorInfo{ImageError::EncodingError, "JPEG encode error"});
+  auto ret_init_compressor = quality > 0
+                                 ? enc.init(outfp.get(), inputimg, quality)
+                                 : enc.init(outfp.get(), inputimg, quality_);
 
-  // Attach output file
-  jpeg_stdio_dest(&enc.cinfo(), outfp.get());
+  if (!ret_init_compressor)
+    return tl::unexpected(ImageErrorInfo{ImageError::EncodingError,
+                                         ret_init_compressor.error().message});
 
-  // Configure output image parameters
-  enc.cinfo().image_width = static_cast<JDIMENSION>(width);
-  enc.cinfo().image_height = static_cast<JDIMENSION>(height);
-  enc.cinfo().input_components = components;
+  auto ret_compression = enc.compress();
 
-  // We already provide YCbCr data → no conversion needed
-  enc.cinfo().in_color_space = JCS_YCbCr;
-
-  // Set default compression parameters
-  jpeg_set_defaults(&enc.cinfo());
-
-  // Use provided quality if valid, otherwise fallback to default member value
-  quality > 0 ? jpeg_set_quality(&enc.cinfo(), quality, TRUE)
-              : jpeg_set_quality(&enc.cinfo(), quality_, TRUE);
-
-  // Begin compression
-  jpeg_start_compress(&enc.cinfo(), TRUE);
-
+  if (!ret_compression)
+    return tl::unexpected(ImageErrorInfo{ImageError::EncodingError,
+                                         ret_compression.error().message});
   // -----------------------------
   // Generation of deinterlaced output
   // -----------------------------
@@ -140,7 +129,7 @@ tl::expected<ImgDimension, ImageErrorInfo> ImgHdr::blend(int quality) noexcept {
 
     // First line is written as-is (no previous row to blend with)
     // Subsequent lines are blended with the previous one
-    const Row &out_row =
+    const Row & out_row =
         (line == 0) ? curr_row : ::blend_rows(curr_row, prev_row);
 
     // Write processed scanline to compressor
