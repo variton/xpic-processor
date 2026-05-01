@@ -40,6 +40,44 @@ JpegDecompressor::~JpegDecompressor() {
   jpeg_destroy_decompress(&cinfo_);
 }
 
+tl::expected<void, JpegDecompressorErrorInfo>
+JpegDecompressor::init(FILE *infp) noexcept {
+  // libjpeg uses setjmp/longjmp for error handling
+  if (setjmp(err_.setjmp_buf))
+    return tl::unexpected(JpegDecompressorErrorInfo{JpegDecompressorError::InitDecompressionError,
+                                                    "JPEG decompression init failed"});
+        //std::string("JPEG decompression init failed : ") + err_.message});
+        //"JPEG decompression init failed : " + std::string{err_.message}});
+
+  // Attach input file to decompressor
+  jpeg_stdio_src(&cinfo_, infp);
+
+  // Read JPEG header (metadata, dimensions, etc.)
+  jpeg_read_header(&cinfo_, TRUE);
+
+  // Force output to YCbCr:
+  // libjpeg will convert automatically from source format (RGB, grayscale,
+  // etc.)
+  cinfo_.out_color_space = JCS_YCbCr;
+
+  // use to force libjpeg to emit an error message
+  //jpeg_start_decompress(&cinfo_);
+
+  return {};
+}
+
+tl::expected<void, JpegDecompressorErrorInfo>
+JpegDecompressor::decompress() noexcept {
+
+  jpeg_start_decompress(&cinfo_);
+
+  if (setjmp(err_.setjmp_buf))
+    return tl::unexpected(
+        JpegDecompressorErrorInfo{JpegDecompressorError::DecompressionError,
+                                  "JPEG decompression failed"});
+  return {};
+}
+
 /**
  * Access the underlying libjpeg decompression struct.
  *

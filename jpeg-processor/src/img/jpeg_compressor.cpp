@@ -67,29 +67,6 @@ JpegCompressor::init(FILE *outfp, const InputImg &inputimg,
   return {};
 }
 
-// tl::expected<void, JpegCompressionErrorInfo> JpegCommpressor::init(FILE *
-// infp, const InputImg & inputimg) noexcept{
-//   // libjpeg uses setjmp/longjmp for error handling
-//   if (setjmp(err_.setjmp_buf))
-//     return tl::unexpected(
-//         JpegCompressionErrorInfo{JpegCompressorError::InitCompressionError,"JPEG
-//         compression init failed"});
-
-//   // Attach input file to decompressor
-//   jpeg_stdio_src(&cinfo_, infp);
-
-//   // Read JPEG header (metadata, dimensions, etc.)
-//   jpeg_read_header(&cinfo_, TRUE);
-
-//   // Force output to YCbCr:
-//   // libjpeg will convert automatically from source format (RGB, grayscale,
-//   // etc.)
-//   cinfo_.out_color_space = JCS_YCbCr;
-
-//   // Begin decompression
-//   jpeg_start_compress(&dec.cinfo());
-// }
-
 tl::expected<void, JpegCompressorErrorInfo>
 JpegCompressor::compress() noexcept {
 

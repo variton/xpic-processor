@@ -2,8 +2,11 @@
 #ifndef JPEG_DECOMPRESSOR_H
 #define JPEG_DECOMPRESSOR_H
 
+#include <error_info.h>
+#include <errty.h>
 #include <jerr.h>
 #include <nc.h>
+#include <tl/expected.hpp>
 
 namespace img {
 
@@ -13,6 +16,12 @@ namespace img {
  * @tparam T Derived type.
  */
 template <typename T> using Movable = core::NC<T>;
+
+enum class JpegDecompressorError { InitDecompressionError, DecompressionError };
+
+using JpegDecompressorErrorInfo = err::ErrorInfo<JpegDecompressorError>;
+
+static_assert(topology::ErrorInfoTy<JpegDecompressorErrorInfo>);
 
 /**
  * @brief RAII wrapper for libjpeg decompression structures.
@@ -35,6 +44,9 @@ public:
    * @brief Destroys the decompression object and releases resources.
    */
   ~JpegDecompressor();
+
+  tl::expected<void, JpegDecompressorErrorInfo> init(FILE *infp) noexcept;
+  tl::expected<void, JpegDecompressorErrorInfo> decompress() noexcept;
 
   /**
    * @brief Access the underlying libjpeg decompression structure.

@@ -69,31 +69,15 @@ tl::expected<ImgDimension, ImageErrorInfo> ImgHdr::blend(int quality) noexcept {
   // Decompressor setup & processing
   // -----------------------------
   JpegDecompressor dec{};
+  auto ret_init_decompressor = dec.init(infp.get());
+  if (!ret_init_decompressor)
+    return tl::unexpected(ImageErrorInfo{
+        ImageError::DecodingError, ret_init_decompressor.error().message});
 
-  // libjpeg uses setjmp/longjmp for error handling
-  if (setjmp(dec.err().setjmp_buf))
-    return tl::unexpected(
-        ImageErrorInfo{ImageError::DecodingError, "JPEG decode error"});
-
-  // Attach input file to decompressor
-  jpeg_stdio_src(&dec.cinfo(), infp.get());
-
-  // Read JPEG header (metadata, dimensions, etc.)
-  jpeg_read_header(&dec.cinfo(), TRUE);
-
-  // Force output to YCbCr:
-  // libjpeg will convert automatically from source format (RGB, grayscale,
-  // etc.)
-  dec.cinfo().out_color_space = JCS_YCbCr;
-
-  // Begin decompression
-  jpeg_start_decompress(&dec.cinfo());
-
-  // Extract image properties
-  const int width = static_cast<int>(dec.cinfo().output_width);
-  const int height = static_cast<int>(dec.cinfo().output_height);
-  const int components = dec.cinfo().output_components; // usually 3 (Y, Cb, Cr)
-  const int row_stride = width * components;            // bytes per scanline
+  auto ret_decompress = dec.decompress();
+  if (!ret_decompress)
+    return tl::unexpected(ImageErrorInfo{ImageError::DecodingError,
+                                         ret_decompress.error().message});
 
   InputImg inputimg{dec.cinfo()};
   // -----------------------------
@@ -119,17 +103,17 @@ tl::expected<ImgDimension, ImageErrorInfo> ImgHdr::blend(int quality) noexcept {
   // -----------------------------
 
   // Buffers for current and previous scanlines
-  std::vector<JSAMPLE> prev_row(row_stride);
-  std::vector<JSAMPLE> curr_row(row_stride);
+  std::vector<JSAMPLE> prev_row(inputimg.row_stride);
+  std::vector<JSAMPLE> curr_row(inputimg.row_stride);
 
-  for (int line = 0; line < height; ++line) {
+  for (int line = 0; line < inputimg.height; ++line) {
     // Read one scanline from decompressor
     JSAMPROW ptr = curr_row.data();
     jpeg_read_scanlines(&dec.cinfo(), &ptr, 1);
 
     // First line is written as-is (no previous row to blend with)
     // Subsequent lines are blended with the previous one
-    const Row & out_row =
+    const Row &out_row =
         (line == 0) ? curr_row : ::blend_rows(curr_row, prev_row);
 
     // Write processed scanline to compressor
@@ -145,7 +129,7 @@ tl::expected<ImgDimension, ImageErrorInfo> ImgHdr::blend(int quality) noexcept {
   jpeg_finish_compress(&enc.cinfo());
 
   // Return resulting image dimensions
-  return ImgDimension{width, height};
+  return ImgDimension{inputimg.width, inputimg.height};
 }
 
 /**
