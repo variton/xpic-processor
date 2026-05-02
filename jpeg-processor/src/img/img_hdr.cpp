@@ -1,5 +1,6 @@
 #include <vector>
 
+#include <blender.h>
 #include <filehandler.h>
 #include <img_hdr.h>
 #include <inputimg.h>
@@ -101,35 +102,43 @@ tl::expected<ImgDimension, ImageErrorInfo> ImgHdr::blend(int quality) noexcept {
   // -----------------------------
   // Generation of deinterlaced output
   // -----------------------------
+  Blender blender{inputimg};
+
+  auto ret_blend = blender.blend(enc, dec);
+
+  if (!ret_blend)
+    return tl::unexpected(
+        ImageErrorInfo{ImageError::BlendError, ret_blend.error().message});
+  return ret_blend.value();
 
   // Buffers for current and previous scanlines
-  std::vector<JSAMPLE> prev_row(inputimg.row_stride);
-  std::vector<JSAMPLE> curr_row(inputimg.row_stride);
+  // std::vector<JSAMPLE> prev_row(inputimg.row_stride);
+  // std::vector<JSAMPLE> curr_row(inputimg.row_stride);
 
-  for (int line = 0; line < inputimg.height; ++line) {
-    // Read one scanline from decompressor
-    JSAMPROW ptr = curr_row.data();
-    jpeg_read_scanlines(&dec.cinfo(), &ptr, 1);
+  // for (int line = 0; line < inputimg.height; ++line) {
+  //   // Read one scanline from decompressor
+  //   JSAMPROW ptr = curr_row.data();
+  //   jpeg_read_scanlines(&dec.cinfo(), &ptr, 1);
 
-    // First line is written as-is (no previous row to blend with)
-    // Subsequent lines are blended with the previous one
-    const Row &out_row =
-        (line == 0) ? curr_row : ::blend_rows(curr_row, prev_row);
+  //   // First line is written as-is (no previous row to blend with)
+  //   // Subsequent lines are blended with the previous one
+  //   const Row &out_row =
+  //       (line == 0) ? curr_row : ::blend_rows(curr_row, prev_row);
 
-    // Write processed scanline to compressor
-    JSAMPROW out_ptr = const_cast<JSAMPROW>(out_row.data());
-    jpeg_write_scanlines(&enc.cinfo(), &out_ptr, 1);
+  //   // Write processed scanline to compressor
+  //   JSAMPROW out_ptr = const_cast<JSAMPROW>(out_row.data());
+  //   jpeg_write_scanlines(&enc.cinfo(), &out_ptr, 1);
 
-    // Store current row for next iteration
-    prev_row = curr_row;
-  }
+  //   // Store current row for next iteration
+  //   prev_row = curr_row;
+  // }
 
-  // Finalize decompression and compression
-  jpeg_finish_decompress(&dec.cinfo());
-  jpeg_finish_compress(&enc.cinfo());
+  // // Finalize decompression and compression
+  // jpeg_finish_decompress(&dec.cinfo());
+  // jpeg_finish_compress(&enc.cinfo());
 
-  // Return resulting image dimensions
-  return ImgDimension{inputimg.width, inputimg.height};
+  // // Return resulting image dimensions
+  // return ImgDimension{inputimg.width, inputimg.height};
 }
 
 /**

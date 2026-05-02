@@ -41,7 +41,8 @@ enum class ImageError {
   /** @brief Image encoding failed. */
   EncodingError,
   /** @brief Opening an input or output file failed. */
-  OpenFileError
+  OpenFileError,
+  BlendError
 };
 
 /**
