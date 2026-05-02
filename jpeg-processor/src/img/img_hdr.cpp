@@ -7,35 +7,6 @@
 #include <jpeg_compressor.h>
 #include <jpeg_decompressor.h>
 
-namespace {
-
-// Alias for a single image row (scanline)
-using Row = std::vector<JSAMPLE>;
-
-/**
- * Blend two scanlines channel-by-channel.
- *
- * Each pixel component is averaged:
- *   out[i] = (curr[i] + prev[i]) / 2
- *
- * Notes:
- * - JSAMPLE is typically an unsigned byte (0–255).
- * - We cast to int before addition to avoid overflow.
- * - Assumes both rows have identical size.
- */
-static Row blend_rows(const Row &curr, const Row &prev) {
-  Row out(curr.size());
-
-  for (std::size_t i = 0; i < curr.size(); ++i) {
-    out[i] = static_cast<JSAMPLE>(
-        (static_cast<int>(curr[i]) + static_cast<int>(prev[i])) / 2);
-  }
-
-  return out;
-}
-
-} // namespace
-
 namespace img {
 
 /**
@@ -66,9 +37,7 @@ tl::expected<ImgDimension, ImageErrorInfo> ImgHdr::blend(int quality) noexcept {
   }
   auto [infp, outfp] = std::move(handlers.value());
 
-  // -----------------------------
   // Decompressor setup & processing
-  // -----------------------------
   JpegDecompressor dec{};
   auto ret_init_decompressor = dec.init(infp.get());
   if (!ret_init_decompressor)
@@ -79,11 +48,10 @@ tl::expected<ImgDimension, ImageErrorInfo> ImgHdr::blend(int quality) noexcept {
   if (!ret_decompress)
     return tl::unexpected(ImageErrorInfo{ImageError::DecodingError,
                                          ret_decompress.error().message});
-
+  // Input image setup
   InputImg inputimg{dec.cinfo()};
-  // -----------------------------
+  
   // Compressor setup & processing
-  // -----------------------------
   JpegCompressor enc{};
 
   auto ret_init_compressor = quality > 0
@@ -99,9 +67,8 @@ tl::expected<ImgDimension, ImageErrorInfo> ImgHdr::blend(int quality) noexcept {
   if (!ret_compression)
     return tl::unexpected(ImageErrorInfo{ImageError::EncodingError,
                                          ret_compression.error().message});
-  // -----------------------------
+  
   // Generation of deinterlaced output
-  // -----------------------------
   Blender blender{inputimg};
 
   auto ret_blend = blender.blend(enc, dec);
@@ -110,35 +77,6 @@ tl::expected<ImgDimension, ImageErrorInfo> ImgHdr::blend(int quality) noexcept {
     return tl::unexpected(
         ImageErrorInfo{ImageError::BlendError, ret_blend.error().message});
   return ret_blend.value();
-
-  // Buffers for current and previous scanlines
-  // std::vector<JSAMPLE> prev_row(inputimg.row_stride);
-  // std::vector<JSAMPLE> curr_row(inputimg.row_stride);
-
-  // for (int line = 0; line < inputimg.height; ++line) {
-  //   // Read one scanline from decompressor
-  //   JSAMPROW ptr = curr_row.data();
-  //   jpeg_read_scanlines(&dec.cinfo(), &ptr, 1);
-
-  //   // First line is written as-is (no previous row to blend with)
-  //   // Subsequent lines are blended with the previous one
-  //   const Row &out_row =
-  //       (line == 0) ? curr_row : ::blend_rows(curr_row, prev_row);
-
-  //   // Write processed scanline to compressor
-  //   JSAMPROW out_ptr = const_cast<JSAMPROW>(out_row.data());
-  //   jpeg_write_scanlines(&enc.cinfo(), &out_ptr, 1);
-
-  //   // Store current row for next iteration
-  //   prev_row = curr_row;
-  // }
-
-  // // Finalize decompression and compression
-  // jpeg_finish_decompress(&dec.cinfo());
-  // jpeg_finish_compress(&enc.cinfo());
-
-  // // Return resulting image dimensions
-  // return ImgDimension{inputimg.width, inputimg.height};
 }
 
 /**
