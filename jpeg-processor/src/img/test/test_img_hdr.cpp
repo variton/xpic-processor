@@ -9,8 +9,7 @@ TEST_CASE("ImgHdr blend") {
   std::string output{"/home/cxx-core/test-results/sample-out.jpg"};
   img::ImgHdr hdr{input, output};
   auto ret = hdr.blend(100);
-  if (ret)
-    CHECK(true);
+  CHECK(ret.has_value());
 }
 
 TEST_CASE("ImgHdr open input failure") {

@@ -93,7 +93,6 @@ private:
 
   /** @brief Output image path. */
   std::string_view output_;
-
 };
 
 } // namespace img

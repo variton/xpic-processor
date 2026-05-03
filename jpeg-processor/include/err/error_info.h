@@ -2,11 +2,11 @@
 #ifndef ERROR_INFO_H
 #define ERROR_INFO_H
 
-#include <string>
-#include <type_traits>
 #include <concepts>
-#include <utility>
+#include <string>
 #include <tl/expected.hpp>
+#include <type_traits>
+#include <utility>
 /**
  * @file error_info.h
  * @brief Defines a generic error container with type and message.
@@ -36,8 +36,8 @@ template <typename ErrorType> struct ErrorInfo {
 };
 
 template <typename ErrorType>
-auto unexpected(ErrorType error,std::string msg) {
-    return tl::unexpected(ErrorInfo<ErrorType>{error,msg});
+auto unexpected(ErrorType error, std::string msg) {
+  return tl::unexpected(ErrorInfo<ErrorType>{error, msg});
 }
 
 } // namespace err
