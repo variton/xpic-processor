@@ -62,9 +62,15 @@ Blender::blend(JpegCompressor &compressor,
   // Finalize decompression and compression
   auto ret_finish_decompress = decompressor.finish_decompress();
   if (!ret_finish_decompress)
-    return tl::unexpected(
-        BlenderErrorInfo{BlenderError::BlendFinishDecompressionError,
-                         ret_finish_decompress.error().message});
+    return err::unexpected(BlenderError::BlendFinishDecompressionError,
+                           ret_finish_decompress.error().message);
+    
+    // return tl::unexpected(
+    //     BlenderErrorInfo{BlenderError::BlendFinishDecompressionError,
+    //                      ret_finish_decompress.error().message});
+
+
+
 
   auto ret_finish_compress = compressor.finish_compress();
   if (!ret_finish_compress)

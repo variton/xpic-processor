@@ -4,7 +4,9 @@
 
 #include <string>
 #include <type_traits>
-
+#include <concepts>
+#include <utility>
+#include <tl/expected.hpp>
 /**
  * @file error_info.h
  * @brief Defines a generic error container with type and message.
@@ -32,6 +34,11 @@ template <typename ErrorType> struct ErrorInfo {
   /** @brief Human-readable error description. */
   std::string message;
 };
+
+template <typename ErrorType>
+auto unexpected(ErrorType error,std::string msg) {
+    return tl::unexpected(ErrorInfo<ErrorType>{error,msg});
+}
 
 } // namespace err
 
