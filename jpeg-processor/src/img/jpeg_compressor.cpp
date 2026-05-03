@@ -70,9 +70,9 @@ JpegCompressor::init(FILE *outfp, const InputImg &inputimg,
 tl::expected<void, JpegCompressorErrorInfo>
 JpegCompressor::compress() noexcept {
 
-  if (!is_initialized()) 
-      return err::unexpected(JpegCompressorError::NotInitialized,
-                             "JPEG compression not initialized\n");
+  if (!is_initialized())
+    return err::unexpected(JpegCompressorError::NotInitialized,
+                           "JPEG compression not initialized\n");
 
   if (setjmp(err_.setjmp_buf))
     return tl::unexpected(JpegCompressorErrorInfo{
@@ -86,7 +86,7 @@ JpegCompressor::compress() noexcept {
 tl::expected<void, JpegCompressorErrorInfo>
 JpegCompressor::finish_compress() noexcept {
 
-  if (!is_initialized()) 
+  if (!is_initialized())
     return err::unexpected(JpegCompressorError::NotInitialized,
                            "JPEG compression not initialized\n");
 
@@ -94,10 +94,10 @@ JpegCompressor::finish_compress() noexcept {
     return tl::unexpected(
         JpegCompressorErrorInfo{JpegCompressorError::FinishCompressionError,
                                 "JPEG finish compression failed"});
- 
+
   jpeg_finish_compress(&cinfo_);
 
- return {};
+  return {};
 }
 
 /**
@@ -123,8 +123,8 @@ jpeg_compress_struct &JpegCompressor::cinfo() noexcept { return cinfo_; }
 JpegError &JpegCompressor::err() noexcept { return err_; }
 
 bool JpegCompressor::is_initialized() noexcept {
-    return cinfo_.jpeg_width > 0 && cinfo_.jpeg_height > 0 && cinfo_.input_components > 0;
+  return cinfo_.image_width > 0 && cinfo_.image_height > 0 &&
+         cinfo_.input_components > 0;
 }
-
 
 } // namespace img

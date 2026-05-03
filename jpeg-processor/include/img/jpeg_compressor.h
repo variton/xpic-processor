@@ -72,7 +72,6 @@ public:
   JpegError &err() noexcept;
 
 private:
-
   bool is_initialized() noexcept;
 
   /** @brief libjpeg compression structure. */

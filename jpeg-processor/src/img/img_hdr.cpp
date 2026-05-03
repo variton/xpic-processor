@@ -50,7 +50,7 @@ tl::expected<ImgDimension, ImageErrorInfo> ImgHdr::blend(int quality) noexcept {
                                          ret_decompress.error().message});
   // Input image setup
   InputImg inputimg{dec.cinfo()};
-  
+
   // Compressor setup & processing
   JpegCompressor enc{};
 
@@ -65,7 +65,7 @@ tl::expected<ImgDimension, ImageErrorInfo> ImgHdr::blend(int quality) noexcept {
   if (!ret_compression)
     return tl::unexpected(ImageErrorInfo{ImageError::EncodingError,
                                          ret_compression.error().message});
-  
+
   // Generation of deinterlaced output
   Blender blender{inputimg};
 

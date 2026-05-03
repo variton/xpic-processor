@@ -64,13 +64,10 @@ Blender::blend(JpegCompressor &compressor,
   if (!ret_finish_decompress)
     return err::unexpected(BlenderError::BlendFinishDecompressionError,
                            ret_finish_decompress.error().message);
-    
-    // return tl::unexpected(
-    //     BlenderErrorInfo{BlenderError::BlendFinishDecompressionError,
-    //                      ret_finish_decompress.error().message});
 
-
-
+  // return tl::unexpected(
+  //     BlenderErrorInfo{BlenderError::BlendFinishDecompressionError,
+  //                      ret_finish_decompress.error().message});
 
   auto ret_finish_compress = compressor.finish_compress();
   if (!ret_finish_compress)
