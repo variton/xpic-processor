@@ -19,6 +19,7 @@ namespace img {
 template <typename T> using Movable = core::NC<T>;
 
 enum class JpegCompressorError {
+  NotInitialized,
   InitCompressionError,
   CompressionError,
   FinishCompressionError,
@@ -71,6 +72,9 @@ public:
   JpegError &err() noexcept;
 
 private:
+
+  bool is_initialized() noexcept;
+
   /** @brief libjpeg compression structure. */
   jpeg_compress_struct cinfo_;
 

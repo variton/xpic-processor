@@ -13,3 +13,4 @@ docs/valgrind-report.html
 output/
 sample-out.jpg
 reports/
+*.swm
