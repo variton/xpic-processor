@@ -45,9 +45,8 @@ JpegCompressor::init(FILE *outfp, const InputImg &inputimg,
                      int quality) noexcept {
   // libjpeg uses setjmp/longjmp for error handling
   if (setjmp(err_.setjmp_buf))
-    return tl::unexpected(
-        JpegCompressorErrorInfo{JpegCompressorError::InitCompressionError,
-                                "JPEG compression init failed\n"});
+    return err::unexpected(JpegCompressorError::InitCompressionError,
+                           "JPEG compression init failed\n");
 
   jpeg_stdio_dest(&cinfo_, outfp);
 
@@ -75,8 +74,8 @@ JpegCompressor::compress() noexcept {
                            "JPEG compression not initialized\n");
 
   if (setjmp(err_.setjmp_buf))
-    return tl::unexpected(JpegCompressorErrorInfo{
-        JpegCompressorError::CompressionError, "JPEG compression failed\n"});
+    return err::unexpected(JpegCompressorError::CompressionError,
+                           "JPEG compression failed\n");
 
   jpeg_start_compress(&cinfo_, TRUE);
 
@@ -91,9 +90,8 @@ JpegCompressor::finish_compress() noexcept {
                            "JPEG compression not initialized\n");
 
   if (setjmp(err_.setjmp_buf))
-    return tl::unexpected(
-        JpegCompressorErrorInfo{JpegCompressorError::FinishCompressionError,
-                                "JPEG finish compression failed\n"});
+    return err::unexpected(JpegCompressorError::FinishCompressionError,
+                           "JPEG finish compression failed\n");
 
   jpeg_finish_compress(&cinfo_);
 
