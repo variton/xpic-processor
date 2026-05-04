@@ -47,7 +47,7 @@ JpegCompressor::init(FILE *outfp, const InputImg &inputimg,
   if (setjmp(err_.setjmp_buf))
     return tl::unexpected(
         JpegCompressorErrorInfo{JpegCompressorError::InitCompressionError,
-                                "JPEG compression init failed"});
+                                "JPEG compression init failed\n"});
 
   jpeg_stdio_dest(&cinfo_, outfp);
 
@@ -76,7 +76,7 @@ JpegCompressor::compress() noexcept {
 
   if (setjmp(err_.setjmp_buf))
     return tl::unexpected(JpegCompressorErrorInfo{
-        JpegCompressorError::CompressionError, "JPEG compression failed"});
+        JpegCompressorError::CompressionError, "JPEG compression failed\n"});
 
   jpeg_start_compress(&cinfo_, TRUE);
 
@@ -93,7 +93,7 @@ JpegCompressor::finish_compress() noexcept {
   if (setjmp(err_.setjmp_buf))
     return tl::unexpected(
         JpegCompressorErrorInfo{JpegCompressorError::FinishCompressionError,
-                                "JPEG finish compression failed"});
+                                "JPEG finish compression failed\n"});
 
   jpeg_finish_compress(&cinfo_);
 

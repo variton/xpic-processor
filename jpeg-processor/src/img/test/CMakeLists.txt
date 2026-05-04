@@ -4,12 +4,12 @@ add_executable(test_img_hdr
 
 target_include_directories(test_img_hdr PUBLIC
   $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/img>
+  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/core>
   $<INSTALL_INTERFACE:include>
 )
 
 target_link_libraries(test_img_hdr PRIVATE
                       img
-                      platform
                       doctest::doctest
                       fmt::fmt
                       $<$<CONFIG:Debug>:--coverage>)
@@ -32,14 +32,15 @@ add_executable(test_jpeg_compressor
 
 target_include_directories(test_jpeg_compressor PUBLIC
   $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/img>
+  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/fio>
+  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/core>
   $<INSTALL_INTERFACE:include>
 )
 
 target_link_libraries(test_jpeg_compressor PRIVATE
                       img
-                      platform
+                      fio
                       doctest::doctest
-                      fmt::fmt
                       $<$<CONFIG:Debug>:--coverage>)
 
 target_compile_options(test_jpeg_compressor PRIVATE

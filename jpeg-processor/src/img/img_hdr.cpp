@@ -41,13 +41,13 @@ tl::expected<ImgDimension, ImageErrorInfo> ImgHdr::blend(int quality) noexcept {
   JpegDecompressor dec{};
   auto ret_init_decompressor = dec.init(infp.get());
   if (!ret_init_decompressor)
-    return tl::unexpected(ImageErrorInfo{
-        ImageError::DecodingError, ret_init_decompressor.error().message});
+    return err::unexpected(ImageError::DecodingError,
+                           ret_init_decompressor.error().message);
 
   auto ret_decompress = dec.decompress();
   if (!ret_decompress)
-    return tl::unexpected(ImageErrorInfo{ImageError::DecodingError,
-                                         ret_decompress.error().message});
+    return err::unexpected(ImageError::DecodingError,
+                           ret_decompress.error().message);
   // Input image setup
   InputImg inputimg{dec.cinfo()};
 
@@ -57,14 +57,14 @@ tl::expected<ImgDimension, ImageErrorInfo> ImgHdr::blend(int quality) noexcept {
   auto ret_init_compressor = enc.init(outfp.get(), inputimg, quality);
 
   if (!ret_init_compressor)
-    return tl::unexpected(ImageErrorInfo{ImageError::EncodingError,
-                                         ret_init_compressor.error().message});
+    return err::unexpected(ImageError::EncodingError,
+                           ret_init_compressor.error().message);
 
   auto ret_compression = enc.compress();
 
   if (!ret_compression)
-    return tl::unexpected(ImageErrorInfo{ImageError::EncodingError,
-                                         ret_compression.error().message});
+    return err::unexpected(ImageError::EncodingError,
+                           ret_compression.error().message);
 
   // Generation of deinterlaced output
   Blender blender{inputimg};
@@ -72,8 +72,7 @@ tl::expected<ImgDimension, ImageErrorInfo> ImgHdr::blend(int quality) noexcept {
   auto ret_blend = blender.blend(enc, dec);
 
   if (!ret_blend)
-    return tl::unexpected(
-        ImageErrorInfo{ImageError::BlendError, ret_blend.error().message});
+    return err::unexpected(ImageError::BlendError, ret_blend.error().message);
   return ret_blend.value();
 }
 
