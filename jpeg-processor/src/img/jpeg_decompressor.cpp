@@ -44,9 +44,9 @@ tl::expected<void, JpegDecompressorErrorInfo>
 JpegDecompressor::init(FILE *infp) noexcept {
   // libjpeg uses setjmp/longjmp for error handling
   if (setjmp(err_.setjmp_buf))
-    return tl::unexpected(
-        JpegDecompressorErrorInfo{JpegDecompressorError::InitDecompressionError,
-                                  "JPEG decompression init failed"});
+    return err::unexpected(JpegDecompressorError::InitDecompressionError,
+                           "JPEG decompression init failed\n");
+
   // std::string("JPEG decompression init failed : ") + err_.message});
   //"JPEG decompression init failed : " + std::string{err_.message}});
 
@@ -70,24 +70,24 @@ JpegDecompressor::init(FILE *infp) noexcept {
 tl::expected<void, JpegDecompressorErrorInfo>
 JpegDecompressor::decompress() noexcept {
 
+  if (setjmp(err_.setjmp_buf))
+    return err::unexpected(JpegDecompressorError::DecompressionError,
+                           "JPEG decompression failed\n");
+
   jpeg_start_decompress(&cinfo_);
 
-  if (setjmp(err_.setjmp_buf))
-    return tl::unexpected(
-        JpegDecompressorErrorInfo{JpegDecompressorError::DecompressionError,
-                                  "JPEG decompression failed"});
   return {};
 }
 
 tl::expected<void, JpegDecompressorErrorInfo>
 JpegDecompressor::finish_decompress() noexcept {
 
+  if (setjmp(err_.setjmp_buf))
+    return err::unexpected(JpegDecompressorError::FinishDecompressionError,
+                           "JPEG finish decompression failed\n");
+
   jpeg_finish_decompress(&cinfo_);
 
-  if (setjmp(err_.setjmp_buf))
-    return tl::unexpected(JpegDecompressorErrorInfo{
-        JpegDecompressorError::FinishDecompressionError,
-        "JPEG finish decompression failed"});
   return {};
 }
 

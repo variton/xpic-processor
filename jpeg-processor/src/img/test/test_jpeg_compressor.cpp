@@ -54,9 +54,12 @@ TEST_CASE("JpegCompressor init compression") {
   CHECK(ret_init_compressor.has_value());
 }
 
+//todo fix test coverage
 TEST_CASE("JpegCompressor init compression failed") {
   using namespace img;
   InputImg inputimg{};
+  inputimg.width = -1;
+  inputimg.height = -1;
   JpegCompressor c{};
   auto ret_init_compressor = c.init(nullptr, inputimg, 85);
   if (!ret_init_compressor) {
