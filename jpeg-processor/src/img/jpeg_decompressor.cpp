@@ -70,6 +70,10 @@ JpegDecompressor::init(FILE *infp) noexcept {
 tl::expected<void, JpegDecompressorErrorInfo>
 JpegDecompressor::decompress() noexcept {
 
+  if (!is_initialized())
+    return err::unexpected(JpegDecompressorError::NotInitialized,
+                           "JPEG decompression not initialized\n");
+
   if (setjmp(err_.setjmp_buf))
     return err::unexpected(JpegDecompressorError::DecompressionError,
                            "JPEG decompression failed\n");
@@ -81,6 +85,10 @@ JpegDecompressor::decompress() noexcept {
 
 tl::expected<void, JpegDecompressorErrorInfo>
 JpegDecompressor::finish_decompress() noexcept {
+
+  if (!is_initialized())
+    return err::unexpected(JpegDecompressorError::NotInitialized,
+                           "JPEG decompression not initialized\n");
 
   if (setjmp(err_.setjmp_buf))
     return err::unexpected(JpegDecompressorError::FinishDecompressionError,
@@ -112,5 +120,10 @@ jpeg_decompress_struct &JpegDecompressor::cinfo() noexcept { return cinfo_; }
  * - Caller typically sets a jump point before invoking libjpeg operations
  */
 JpegError &JpegDecompressor::err() noexcept { return err_; }
+
+bool JpegDecompressor::is_initialized() noexcept {
+  return cinfo_.image_width > 0 && cinfo_.image_height > 0 &&
+         cinfo_.num_components > 0;
+}
 
 } // namespace img
