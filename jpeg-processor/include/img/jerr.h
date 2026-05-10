@@ -11,6 +11,9 @@ extern "C" {
 #include <jpeglib.h>
 }
 
+#include <error_info.h>
+#include <string>
+
 namespace img {
 
 /**
@@ -44,6 +47,13 @@ static void jpeg_error_exit(j_common_ptr cinfo) {
   auto *err = reinterpret_cast<JpegError *>(cinfo->err);
   (*cinfo->err->format_message)(cinfo, err->message);
   longjmp(err->setjmp_buf, 1);
+}
+
+template <typename ErrorType>
+auto propagate_err(JpegError &err, ErrorType error, std::string msg) {
+  std::string libjpeg_err_msg{err.message};
+  std::string err_msg{msg + " : " + libjpeg_err_msg + "\n"};
+  return err::unexpected(error, err_msg);
 }
 
 } // namespace img
