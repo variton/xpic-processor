@@ -12,11 +12,11 @@ cd ubuntu-resolute-gcc-15
 docker build -t ixpic:1.0 .
 
 ```
-2. Launch the docker container
+2. Launch the docker container with debugging facility
 *remark:*
     *execute the following command from the jpeg-processor root directory*
 
 ```
-docker run --name=xpicc --hostname=cypher -v $PWD:/home/cxx-core --net=host --restart=no -it ixpic:1.0 /bin/bash
+docker run --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --name=xpicc --hostname=cypher -v $PWD:/home/cxx-core --net=host --restart=no -it ixpic:1.0 /bin/bash
 
 ```

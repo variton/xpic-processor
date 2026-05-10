@@ -71,9 +71,9 @@ Blender::blend(JpegCompressor &compressor,
 
   auto ret_finish_compress = compressor.finish_compress();
   if (!ret_finish_compress)
-    return tl::unexpected(
-        BlenderErrorInfo{BlenderError::BlendFinishCompressionError,
-                         ret_finish_compress.error().message});
+    return err::unexpected(BlenderError::BlendFinishCompressionError,
+                           ret_finish_compress.error().message);
+
   return ImgDimension{inputimg_.width, inputimg_.height};
 }
 
