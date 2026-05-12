@@ -50,8 +50,7 @@ static Row blend_rows(const Row &curr, const Row &prev) {
 
     // Promote to int before addition to avoid unsigned overflow
     out[i] = static_cast<JSAMPLE>(
-        (static_cast<int>(curr[i]) +
-         static_cast<int>(prev[i])) / 2);
+        (static_cast<int>(curr[i]) + static_cast<int>(prev[i])) / 2);
   }
 
   return out;
@@ -72,8 +71,7 @@ namespace img {
  *
  * The referenced object must outlive the blender instance.
  */
-Blender::Blender(const InputImg &inputimg) noexcept
-    : inputimg_{inputimg} {}
+Blender::Blender(const InputImg &inputimg) noexcept : inputimg_{inputimg} {}
 
 /**
  * @brief Destroy the blender object.
@@ -136,44 +134,33 @@ Blender::blend(JpegCompressor &compressor,
     //
     // Remaining lines are blended with the previous scanline.
     const ::Row &out_row =
-        (line == 0)
-            ? curr_row
-            : ::blend_rows(curr_row, prev_row);
+        (line == 0) ? curr_row : ::blend_rows(curr_row, prev_row);
 
     // Write processed scanline to compressor
-    JSAMPROW out_ptr =
-        const_cast<JSAMPROW>(out_row.data());
+    JSAMPROW out_ptr = const_cast<JSAMPROW>(out_row.data());
 
-    jpeg_write_scanlines(&compressor.cinfo(),
-                         &out_ptr,
-                         1);
+    jpeg_write_scanlines(&compressor.cinfo(), &out_ptr, 1);
 
     // Preserve current row for next iteration
     prev_row = curr_row;
   }
 
   // Finalize JPEG decompression
-  auto ret_finish_decompress =
-      decompressor.finish_decompress();
+  auto ret_finish_decompress = decompressor.finish_decompress();
 
   if (!ret_finish_decompress)
-    return err::unexpected(
-        BlenderError::BlendFinishDecompressionError,
-        ret_finish_decompress.error().message);
+    return err::unexpected(BlenderError::BlendFinishDecompressionError,
+                           ret_finish_decompress.error().message);
 
   // Finalize JPEG compression
-  auto ret_finish_compress =
-      compressor.finish_compress();
+  auto ret_finish_compress = compressor.finish_compress();
 
   if (!ret_finish_compress)
-    return err::unexpected(
-        BlenderError::BlendFinishCompressionError,
-        ret_finish_compress.error().message);
+    return err::unexpected(BlenderError::BlendFinishCompressionError,
+                           ret_finish_compress.error().message);
 
   // Return processed image dimensions
-  return ImgDimension{
-      inputimg_.width,
-      inputimg_.height};
+  return ImgDimension{inputimg_.width, inputimg_.height};
 }
 
 } // namespace img

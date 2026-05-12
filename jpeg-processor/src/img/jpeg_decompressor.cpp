@@ -162,9 +162,7 @@ JpegDecompressor::finish_decompress() noexcept {
  * - Caller must follow libjpeg's required call sequence
  * - Allows advanced/custom libjpeg operations outside this wrapper
  */
-jpeg_decompress_struct &JpegDecompressor::cinfo() noexcept {
-  return cinfo_;
-}
+jpeg_decompress_struct &JpegDecompressor::cinfo() noexcept { return cinfo_; }
 
 /**
  * Access the error handler structure.
@@ -176,9 +174,7 @@ jpeg_decompress_struct &JpegDecompressor::cinfo() noexcept {
  * - Caller typically sets a jump point before invoking libjpeg operations
  * - Stores libjpeg error state and jump buffer
  */
-JpegError &JpegDecompressor::err() noexcept {
-  return err_;
-}
+JpegError &JpegDecompressor::err() noexcept { return err_; }
 
 /**
  * Check whether the decompressor has been initialized.
@@ -193,8 +189,7 @@ JpegError &JpegDecompressor::err() noexcept {
  * - Used internally to guard invalid decompression operations.
  */
 bool JpegDecompressor::is_initialized() noexcept {
-  return cinfo_.image_width > 0 &&
-         cinfo_.image_height > 0 &&
+  return cinfo_.image_width > 0 && cinfo_.image_height > 0 &&
          cinfo_.num_components > 0;
 }
 
