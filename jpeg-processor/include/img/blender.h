@@ -84,7 +84,6 @@ using ImgDimension = std::tuple<int, int>;
 class Blender : public Default<Blender> {
 
 public:
-
   /**
    * @brief Construct a blender for the specified input image.
    *
@@ -127,11 +126,9 @@ public:
    *   in the corresponding source file.
    */
   tl::expected<ImgDimension, BlenderErrorInfo>
-  blend(JpegCompressor &compressor,
-        JpegDecompressor &decompressor) noexcept;
+  blend(JpegCompressor &compressor, JpegDecompressor &decompressor) noexcept;
 
 private:
-
   /**
    * @brief Reference to the input image configuration.
    *

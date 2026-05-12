@@ -62,6 +62,10 @@ ArgParser::ArgParser(const std::string &app_name) noexcept
       ->required()
       ->transform([](const std::string &s) { return ::trim(s); });
 
+  // Optional quality setting
+  app_.add_option("-q,--quality", opts_.quality, "JPEG quality")
+      ->transform(CLI::Range(1, 100));
+
   // Additional help text shown at the bottom of CLI11 help/error output
   app_.footer(
       "Syntax:\n"

@@ -50,8 +50,7 @@ enum class JpegDecompressorError {
  * Wraps a @ref JpegDecompressorError together with additional diagnostic
  * information such as error messages and contextual metadata.
  */
-using JpegDecompressorErrorInfo =
-    err::ErrorInfo<JpegDecompressorError>;
+using JpegDecompressorErrorInfo = err::ErrorInfo<JpegDecompressorError>;
 
 /**
  * @brief Verifies that @ref JpegDecompressorErrorInfo satisfies the expected
@@ -123,8 +122,7 @@ public:
    *
    * Must be called before @ref decompress.
    */
-  tl::expected<void, JpegDecompressorErrorInfo>
-  init(FILE *infp) noexcept;
+  tl::expected<void, JpegDecompressorErrorInfo> init(FILE *infp) noexcept;
 
   /**
    * @brief Start JPEG decompression.
@@ -139,8 +137,7 @@ public:
    *
    * Requires successful initialization through @ref init.
    */
-  tl::expected<void, JpegDecompressorErrorInfo>
-  decompress() noexcept;
+  tl::expected<void, JpegDecompressorErrorInfo> decompress() noexcept;
 
   /**
    * @brief Finalize JPEG decompression.
@@ -154,8 +151,7 @@ public:
    *
    * Should be called after all scanlines have been read.
    */
-  tl::expected<void, JpegDecompressorErrorInfo>
-  finish_decompress() noexcept;
+  tl::expected<void, JpegDecompressorErrorInfo> finish_decompress() noexcept;
 
   /**
    * @brief Access the underlying libjpeg decompression structure.
@@ -182,7 +178,6 @@ public:
   JpegError &err() noexcept;
 
 private:
-
   /**
    * @brief Check whether the decompressor has valid initialization state.
    *

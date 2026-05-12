@@ -28,13 +28,13 @@ int main(int argc, char **argv) {
 
   img::ImgHdr hdr{cli_options.input, cli_options.output};
   // the quality of the blending that was choosen is 85%
-  auto ret_img = hdr.blend();
+  auto ret_img = hdr.blend(cli_options.quality);
   if (int ret = ::handle_error(ret_img, logger.get()); ret != 0)
     return ret;
 
   auto [width, height] = ret_img.value();
-  logger->info("Blended {} x {} deinterlaced image at {}", width, height,
-               cli_options.output);
+  logger->info("Blended {} x {} deinterlaced image at {} with quality of {} %",
+               width, height, cli_options.output, cli_options.quality);
 
   return 0;
 }

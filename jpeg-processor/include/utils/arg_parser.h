@@ -2,9 +2,9 @@
 #ifndef ARG_PARSER_H
 #define ARG_PARSER_H
 
-#include <string>
-
 #include <CLI/CLI.hpp>
+#include <cstddef>
+#include <string>
 
 #include <error_info.h>
 #include <errty.h>
@@ -50,6 +50,9 @@ struct Options {
 
   /** @brief Output path. */
   std::string output;
+
+  /** @brief Quality of service. */
+  int quality{85};
 };
 
 /**

@@ -77,7 +77,7 @@ public:
    * @return `tl::expected` containing the output image dimensions on success,
    *         or @ref ImageErrorInfo on failure.
    */
-  tl::expected<ImgDimension, ImageErrorInfo> blend(int quality = 85) noexcept;
+  tl::expected<ImgDimension, ImageErrorInfo> blend(int quality) noexcept;
 
 private:
   /**
