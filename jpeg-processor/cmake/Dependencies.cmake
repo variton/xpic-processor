@@ -24,7 +24,7 @@ find_package(spdlog)
 if(NOT spdlog_FOUND)
     message(FATAL_ERROR
         "libspdlog-dev not found.\n"
-        "On Debian, install it with:\n"
+        "On Debian/Ubuntu, install it with:\n"
         "  sudo apt install libspdlog-dev"
     )
 endif()
@@ -32,8 +32,8 @@ endif()
 find_package(fmt)
 if(NOT fmt_FOUND)
     message(FATAL_ERROR
-        "libspdlog-dev not found.\n"
-        "On Debian, install it with:\n"
+        "libfmt-dev not found.\n"
+        "On Debian/Ubuntu, install it with:\n"
         "  sudo apt install libfmt-dev"
     )
 endif()
@@ -44,7 +44,7 @@ find_program(GENHTML_EXECUTABLE genhtml)
 if(NOT LCOV_EXECUTABLE OR NOT GENHTML_EXECUTABLE)
     message(FATAL_ERROR
         "lcov/genhtml not found.\n"
-        "On Debian, install it with:\n"
+        "On Debian/Ubuntu, install it with:\n"
         "  sudo apt install lcov"
     )
 endif()
@@ -54,7 +54,7 @@ find_program(GCOV_EXECUTABLE gcov)
 if(NOT GCOV_EXECUTABLE)
     message(FATAL_ERROR
         "lcov/genhtml not found.\n"
-        "On Debian, install it with:\n"
+        "On Debian/Ubuntu, install it with:\n"
         "  sudo apt install gcov"
     )
 endif()
