@@ -1,127 +1,212 @@
-# Xpic-processor
-Cli and tools to process image files.
-It implements a cpp wrapper around libjpeg to process jpeg files.
-It is also intended to provide a simple cli to deinterlace images.
+# `xpic-processor`
 
-## Quick start
-### Prepare environment
-Prepare the docker image to develop and test jpeg-processor
- 
-```
+> Modern C++20 image-processing toolkit and CLI utilities for JPEG manipulation and deinterlacing.
+
+`xpic-processor` provides a modern C++ wrapper around `libjpeg` together with command-line tools for image processing workflows.
+
+---
+
+## Features
+
+- Modern C++20 codebase
+- JPEG processing built on top of `libjpeg`
+- Image deinterlacing utilities
+- Docker-based reproducible development environment
+- Automated local CI workflow
+- Doxygen documentation generation
+- Valgrind integration
+- Coverage report generation
+
+---
+
+## Requirements
+
+| Dependency | Version |
+|---|---|
+| GCC | 15+ |
+| CMake | 3.20+ |
+| Docker | Latest |
+| libjpeg | Required |
+
+---
+
+## Quick Start
+
+### Build the Docker Image
+
+```bash
 cd ubuntu-resolute-gcc-15
 
-```
-#### Generate the docker image
-
-```
-docker build -t ixpic:1.0 .
-
-```
-#### Launch the docker container
-*remark:*
-    *execute the following command from the jpeg-processor directory*
-
-```
-docker run --name=xpicc --hostname=cypher -v $PWD:/home/cxx-core --net=host --restart=no -it ixpic:1.0 /bin/bash
-
+docker build -t xpic:1.0 .
 ```
 
-### Environment to develop the jpeg-processor 
+---
 
-#### Build & compile jpeg-processor (Quick start)
-*remark:*
-    *execute the following command from the /home/cxx-core directory in the docker container*
+### Launch the Development Container
 
-execute the local C.I:
+Run the following command from the project root directory:
 
+```bash
+docker run \
+    --name=xpicc \
+    --hostname=cypher \
+    -v $PWD:/home/cxx-core \
+    --net=host \
+    --restart=no \
+    -it xpic:1.0 /bin/bash
 ```
+
+---
+
+## Build & Test
+
+Inside the container:
+
+```bash
+cd /home/cxx-core
+
 ./local-ci.sh
-
 ```
-*remark:*
-    *the command line above has generated the reports & documentation as well*
 
+The local CI pipeline performs the following tasks:
 
-#### Get the help menu of the deinterlacer binary 
-*remark:*
-    *execute the following command from the /home/cxx-core directory in the docker container*
+- Configure and build the project
+- Execute unit tests
+- Generate coverage reports
+- Generate Doxygen documentation
+- Execute Valgrind analysis
 
-get the help menu of the deinterlacer binary:
+---
 
-```
+## CLI Usage
+
+### Display Help Menu
+
+```bash
 deinterlacer --help
-
-``` 
-
-
-#### Execute the deinterlacer binary
-*remark:*
-    *execute the following command from the /home/cxx-core directory in the docker container*
-
-get the help menu of the deinterlacer binary:
-
 ```
-deinterlacer -i rc/interlaced.jpg -o output/deinterlaced.jpg 
 
-``` 
+---
 
+### Deinterlace an Image
 
-#### Check the logs
-*remark:*
-    *execute the following command from the /home/cxx-core directory in the docker container*
-
-check the logs of the deinterlacer binary:
-
+```bash
+deinterlacer \
+    -i rc/interlaced.jpg \
+    -o output/deinterlaced.jpg
 ```
+
+---
+
+## Logs
+
+Application logs are available in:
+
+```bash
+logs/deinterlacer.log
+```
+
+Display logs:
+
+```bash
 cat logs/deinterlacer.log
-
-``` 
-
-
-#### Read the documentation:
-*remark 1:*
-    *execute the following command from the /home/cxx-core directory in the docker container*
-
-
-check the reports and documentation:
-
 ```
-cd reports; ls
 
-``` 
+---
 
+## Documentation & Reports
 
-read the reports and documentation:
-*remark 2:*
-    *open your browser and add the url of the different files*
+Generated artifacts are available under the `reports/` directory.
 
-open the coverage tests:
+### Coverage Report
 
+Open in your browser:
+
+```text
+reports/coverage_html/index.html
 ```
-file:///<your path to the jpeg-processor folder>/reports/coverage_html/index.html
 
-``` 
+---
 
+### Doxygen Documentation
 
-open the doxygen documentation:
+Open in your browser:
 
+```text
+reports/html/index.html
 ```
-file:///<your path to the jpeg-processor folder>/reports/html/index.html
 
-``` 
+---
 
+### Valgrind Report
 
-open the valgrind reports:
+Open in your browser:
 
+```text
+reports/valgrind-report.html
 ```
-file:///<your path to the jpeg-processor folder>/reports/valgrind-report.html
 
-``` 
+---
 
+### Quality Report
 
-open the deinterlacer quality report[raw valgrind report]:
-
+```text
+reports/deinterlacer-quality-report.log
 ```
-file:///<your path to the jpeg-processor folder>/reports/deinterlacer-quality-report.log
 
+---
+
+## Project Structure
+
+```text
+.
+├── include/                  # Public headers
+├── src/                      # Source files
+├── tests/                    # Unit tests
+├── reports/                  # Generated reports
+├── logs/                     # Runtime logs
+├── rc/                       # Resource files
+├── ubuntu-resolute-gcc-15/   # Docker environment
+├── docs/                     # Documentation
+└── CMakeLists.txt
 ```
+
+---
+
+## Development Workflow
+
+Recommended development workflow:
+
+1. Build the Docker image
+2. Launch the development container
+3. Execute the local CI pipeline
+4. Inspect generated reports and logs
+
+---
+
+## Design Goals
+
+- Clean and maintainable C++20 architecture
+- Safe abstractions around `libjpeg`
+- Reproducible builds and tooling
+- Automated quality analysis
+- Extensible image-processing pipeline
+
+---
+
+## Roadmap
+
+- [ ] PNG support
+- [ ] SIMD optimizations
+- [ ] Batch processing support
+- [ ] GPU acceleration
+- [ ] C++23 modules support
+- [ ] Additional image filters
+
+---
+
+## License
+
+Licensed under the MIT License.
+
+See `LICENSE` for details.
