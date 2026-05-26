@@ -124,6 +124,9 @@ fi
 log "Generating HTML Valgrind report"
 python3 tools/valgrind-report-maker.py "$REPORT_DIR" -o docs/valgrind-report.html
 
+log "Generating HTML Unit test report"
+python3 tools/unit-test-report-maker.py --input $LAB_DIR/bin --output "$REPORT_DIR"
+
 cp "$DOCS_DIR"/valgrind-report.html "$REPORTS_DIR"/valgrind-report.html
 
 log "Running clang-format"
