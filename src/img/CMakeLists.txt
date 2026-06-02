@@ -8,8 +8,9 @@ add_library(img SHARED
 target_include_directories(img PUBLIC
   $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/img>
   $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/fio>
-  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/err>
-  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/topology>
+  $<BUILD_INTERFACE:${tcxx_SOURCE_DIR}/include/err>
+  $<BUILD_INTERFACE:${tcxx_SOURCE_DIR}/include/core>
+  $<BUILD_INTERFACE:${tcxx_SOURCE_DIR}/include/topology>
   $<INSTALL_INTERFACE:include>
 )
 

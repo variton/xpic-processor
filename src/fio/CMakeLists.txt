@@ -3,10 +3,8 @@ add_library(fio SHARED
             filehandler.cpp)
 
 target_include_directories(fio PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/>
-  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/core>
-  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/err>
-  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/topology>
+  $<BUILD_INTERFACE:${tcxx_SOURCE_DIR}/include/err>
+  $<BUILD_INTERFACE:${tcxx_SOURCE_DIR}/include/topology>
   $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/fio>
   $<INSTALL_INTERFACE:include>
 )

@@ -8,7 +8,6 @@
 
 #include <error_info.h>
 #include <errty.h>
-#include <nc.h>
 #include <tl/expected.hpp>
 
 /**
@@ -34,13 +33,6 @@ struct FileCloser {
       fclose(f);
   }
 };
-
-/**
- * @brief Alias to the default non-copyable wrapper type.
- *
- * @tparam T Wrapped type.
- */
-template <typename T> using Default = core::NC<T>;
 
 /**
  * @brief Owning smart pointer for @c FILE handles.

@@ -26,7 +26,6 @@ file(GLOB SOURCES "src/*.cpp")
 enable_testing()
 #source code
 add_subdirectory(src)
-#add_subdirectory(test)
 #non regression test
 #add_subdirectory(nrt)
 #tool for coverage
