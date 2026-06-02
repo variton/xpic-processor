@@ -3,11 +3,10 @@ add_library(utils SHARED
             arg_parser.cpp)
 
 target_include_directories(utils PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/>
-  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/core>
   $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/utils>
-  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/err>
-  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/topology>
+  $<BUILD_INTERFACE:${tcxx_SOURCE_DIR}/include/err>
+  $<BUILD_INTERFACE:${tcxx_SOURCE_DIR}/include/core>
+  $<BUILD_INTERFACE:${tcxx_SOURCE_DIR}/include/topology>
   $<INSTALL_INTERFACE:include>
 )
 

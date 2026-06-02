@@ -4,7 +4,6 @@ add_executable(deinterlacer
 )
 
 target_include_directories(deinterlacer PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/>
   $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/img>
   $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/utils>
   $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/fio>

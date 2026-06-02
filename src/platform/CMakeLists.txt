@@ -4,10 +4,10 @@ add_library(platform SHARED
             env_mgr.cpp)
 
 target_include_directories(platform PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/core>
   $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/platform>
-  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/err>
-  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/topology>
+  $<BUILD_INTERFACE:${tcxx_SOURCE_DIR}/include/err>
+  $<BUILD_INTERFACE:${tcxx_SOURCE_DIR}/include/core>
+  $<BUILD_INTERFACE:${tcxx_SOURCE_DIR}/include/topology>
   $<INSTALL_INTERFACE:include>
 )
 
