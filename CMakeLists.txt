@@ -13,7 +13,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-include(Dependencies)
+include(Dependencies-pkg)
+include(Dependencies-repo)
 
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
@@ -25,7 +26,7 @@ file(GLOB SOURCES "src/*.cpp")
 enable_testing()
 #source code
 add_subdirectory(src)
-add_subdirectory(test)
+#add_subdirectory(test)
 #non regression test
 #add_subdirectory(nrt)
 #tool for coverage

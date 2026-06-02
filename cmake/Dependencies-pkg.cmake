@@ -58,33 +58,3 @@ if(NOT GCOV_EXECUTABLE)
         "  sudo apt install gcov"
     )
 endif()
-
-include(FetchContent)
-
-set(FETCHCONTENT_BASE_DIR
-    "${CMAKE_SOURCE_DIR}/.deps"
-    CACHE PATH "FetchContent cache"
-    FORCE
-)
-
-set(DOCTEST_SOURCE_DIR "${FETCHCONTENT_BASE_DIR}/doctest-src")
-
-if(EXISTS "${DOCTEST_SOURCE_DIR}/CMakeLists.txt")
-    message(STATUS "Using cached doctest: ${DOCTEST_SOURCE_DIR}")
-
-    set(FETCHCONTENT_SOURCE_DIR_DOCTEST
-        "${DOCTEST_SOURCE_DIR}"
-        CACHE PATH "Cached doctest source"
-        FORCE
-    )
-else()
-    message(STATUS "Fetching doctest")
-endif()
-
-FetchContent_Declare(
-    doctest
-    GIT_REPOSITORY https://github.com/doctest/doctest.git
-    GIT_TAG v2.4.12
-)
-
-FetchContent_MakeAvailable(doctest)
