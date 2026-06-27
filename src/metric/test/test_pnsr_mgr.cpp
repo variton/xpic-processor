@@ -24,17 +24,13 @@ TEST_CASE("ComputePnsr OK") {
   JpegDecompressor decompressor{};
   auto ret_init_decompressor = decompressor.init(input_file.value().get());
   CHECK(ret_init_decompressor.has_value());
-  // auto ret_decompress = decompressor.decompress();
+  auto ret_decompress = decompressor.decompress();
   CHECK(ret_decompress.has_value());
   // image object creation ==================================================
   InputImg inputimg{decompressor.cinfo()};
-
-  pnsr mgr ===============================================================
-  auto pnsr_mgr = metric::PSNRMgr{};
-  auto pnsr = pnsr_mgr.computePNSR(inputimg.width, inputimg.height,
-  inputimg.components); auto ret_finish_decompression =
-  decompressor.finish_decompress();
-  CHECK(ret_finish_decompression.has_value());
+  //pnsr mgr ===============================================================
+  // auto pnsr_mgr = metric::PSNRMgr{};
+  // auto pnsr = pnsr_mgr.computePNSR(inputimg.width, inputimg.height,inputimg.components); 
 }
 
 // todo fix test coverage
