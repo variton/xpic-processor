@@ -10,7 +10,7 @@ namespace img {
 struct InputImg {
   int width;
   int height;
-  int components;
+  int components;//channels
   int row_stride;
 
   InputImg() noexcept : width{0}, height{0}, components{0}, row_stride{0} {}
