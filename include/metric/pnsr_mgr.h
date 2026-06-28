@@ -29,8 +29,7 @@ public:
                    std::span<const std::uint8_t> watermarked) noexcept;
   ~PSNRMgr();
 
-  tl::expected<double, PSNRMgrErrorInfo> computePNSR(int width, 
-                                                     int height,
+  tl::expected<double, PSNRMgrErrorInfo> computePNSR(int width, int height,
                                                      int channels) noexcept;
 
 private:
