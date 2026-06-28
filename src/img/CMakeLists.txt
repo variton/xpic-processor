@@ -3,6 +3,7 @@ add_library(img SHARED
             img_hdr.cpp
             jpeg_compressor.cpp
             jpeg_decompressor.cpp
+            jpeg_decoder.cpp
             blender.cpp)
 
 target_include_directories(img PUBLIC
