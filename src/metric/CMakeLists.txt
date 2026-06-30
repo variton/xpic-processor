@@ -1,6 +1,7 @@
 
 add_library(metric SHARED
-            pnsr_mgr.cpp)
+            pnsr_mgr.cpp
+            ssim_mgr.cpp)
 
 target_include_directories(metric PUBLIC
   $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/metric>
