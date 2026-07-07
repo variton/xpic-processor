@@ -36,7 +36,8 @@ using SSIMMgrErrorInfo = err::ErrorInfo<SSIMMgrError>;
 static_assert(topology::ErrorInfoTy<SSIMMgrErrorInfo>);
 
 /**
- * @brief Computes Structural Similarity Index Measure between two image buffers.
+ * @brief Computes Structural Similarity Index Measure between two image
+ * buffers.
  *
  * SSIMMgr stores non-owning views of the original and watermarked image data.
  * The referenced buffers must remain valid for the lifetime of the manager.
@@ -55,9 +56,7 @@ public:
    */
   explicit SSIMMgr(std::span<const std::uint8_t> original,
                    std::span<const std::uint8_t> watermarked,
-                   std::size_t window = 11,
-                   double k1 = 0.01,
-                   double k2 = 0.03,
+                   std::size_t window = 11, double k1 = 0.01, double k2 = 0.03,
                    double l = 255.0) noexcept;
 
   /**
@@ -71,16 +70,17 @@ public:
    * @param height Image height in pixels.
    * @return SSIM value, or SSIMMgrErrorInfo on failure.
    */
-  tl::expected<double, SSIMMgrErrorInfo> computeSSIM(int width, int height) noexcept;
+  tl::expected<double, SSIMMgrErrorInfo> computeSSIM(int width,
+                                                     int height) noexcept;
 
 private:
-  std::span<const std::uint8_t> original_;    /**< Original image data view. */
-  std::span<const std::uint8_t> watermarked_; /**< Watermarked image data view. */
+  std::span<const std::uint8_t> original_; /**< Original image data view. */
+  std::span<const std::uint8_t>
+      watermarked_; /**< Watermarked image data view. */
   std::size_t window_;
   double k1_;
   double k2_;
   double l_;
-
 };
 
 } // namespace metric

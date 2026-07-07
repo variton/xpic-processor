@@ -13,7 +13,6 @@
 #include <jpeg_decompressor.h>
 #include <mgr.h>
 
-
 TEST_CASE("Mgr computePnsr OK") {
   // auto &local = platform::EnvMgr::get_instance();
   // auto rc = local.get_env_var("RC");
@@ -38,10 +37,9 @@ TEST_CASE("Mgr computePnsr OK") {
   original.decode(decompressor);
   JpegDecoder watermarked{inputimg.width, inputimg.height, inputimg.components};
   watermarked.decode(decompressor);
-  //mgr ===============================================================
-  quality::Mgr mgr{original.pixels(), 
-                   watermarked.pixels(),
-                   static_cast<std::size_t>(inputimg.width), 
+  // mgr ===============================================================
+  quality::Mgr mgr{original.pixels(), watermarked.pixels(),
+                   static_cast<std::size_t>(inputimg.width),
                    static_cast<std::size_t>(inputimg.height)};
   auto ret = mgr.computePNSR(inputimg.components);
   CHECK(ret.has_value());
