@@ -68,8 +68,9 @@ public:
                                                      int channels) noexcept;
 
 private:
-  std::span<const std::uint8_t> original_;    /**< Original image data view. */
-  std::span<const std::uint8_t> watermarked_; /**< Watermarked image data view. */
+  std::span<const std::uint8_t> original_; /**< Original image data view. */
+  std::span<const std::uint8_t>
+      watermarked_; /**< Watermarked image data view. */
 };
 
 } // namespace metric
