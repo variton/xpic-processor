@@ -2,8 +2,7 @@
 #ifndef JPEG_COMPRESSOR_H
 #define JPEG_COMPRESSOR_H
 
-#include <error_info.h>
-#include <errty.h>
+#include <err_utils.h>
 #include <inputimg.h>
 #include <jerr.h>
 #include <nc.h>
@@ -44,20 +43,7 @@ enum class JpegCompressorError {
   FinishCompressionError,
 };
 
-/**
- * @brief Error information type for JPEG compressor operations.
- *
- * @details
- * Wraps a @ref JpegCompressorError together with additional diagnostic
- * information such as error messages and contextual metadata.
- */
-using JpegCompressorErrorInfo = err::ErrorInfo<JpegCompressorError>;
-
-/**
- * @brief Verifies that @ref JpegCompressorErrorInfo satisfies the expected
- * error-info concept requirements.
- */
-static_assert(topology::ErrorInfoTy<JpegCompressorErrorInfo>);
+ERR_DEFINE_ERROR_INFO(JpegCompressorError, JpegCompressorErrorInfo);
 
 /**
  * @brief RAII wrapper for libjpeg compression structures.
