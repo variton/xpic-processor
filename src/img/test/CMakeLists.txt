@@ -112,4 +112,31 @@ set_tests_properties(test_blender PROPERTIES
 
 #=======================================================================
 
+add_executable(test_jpeg_decoder
+               test_jpeg_decoder.cpp)
+
+target_include_directories(test_jpeg_decoder PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/img>
+  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/fio>
+  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/core>
+  $<INSTALL_INTERFACE:include>
+)
+
+target_link_libraries(test_jpeg_decoder PRIVATE
+                      img
+                      fio
+                      doctest::doctest
+                      $<$<CONFIG:Debug>:--coverage>)
+
+target_compile_options(test_jpeg_decoder PRIVATE
+                       -Wall -Wextra -pedantic
+                       #$<$<CONFIG:Debug>:--coverage -Og -g>
+                       $<$<CONFIG:Debug>:-O0 -g3 -fno-inline -fno-omit-frame-pointer>
+                       $<$<CONFIG:Release>:-O3 -DNDEBUG>)
+
+add_test(NAME test_jpeg_decoder COMMAND $<TARGET_FILE:test_jpeg_decoder>)
+
+set_tests_properties(test_jpeg_decoder PROPERTIES
+  ENVIRONMENT "RC=${TRC};OUT=${TOUT}"
+)
 
