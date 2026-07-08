@@ -2,9 +2,8 @@
 #ifndef JPEG_DECODER_H
 #define JPEG_DECODER_H
 
-#include <error_info.h>
-#include <errty.h>
 #include <jerr.h>
+#include <err_utils.h>
 #include <jpeg_decompressor.h>
 #include <ncnm.h>
 #include <tl/expected.hpp>
@@ -31,10 +30,7 @@ enum class JpegDecoderError {
   JpegDecodeError
 };
 
-/**
- * @brief Error information type for JPEG decoder operations.
- */
-using JpegDecoderErrorInfo = err::ErrorInfo<JpegDecoderError>;
+ERR_DEFINE_ERROR_INFO(JpegDecoderError, JpegDecoderErrorInfo);
 
 /**
  * @brief Decodes JPEG scanlines into an owned pixel buffer.
