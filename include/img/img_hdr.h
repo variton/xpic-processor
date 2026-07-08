@@ -4,8 +4,7 @@
 
 #include <tuple>
 
-#include <error_info.h>
-#include <errty.h>
+#include <err_utils.h>
 #include <filehandler.h>
 #include <ncnm.h>
 #include <tl/expected.hpp>
@@ -45,12 +44,7 @@ enum class ImageError {
   BlendError
 };
 
-/**
- * @brief Structured error information for image operations.
- */
-using ImageErrorInfo = err::ErrorInfo<ImageError>;
-
-static_assert(topology::ErrorInfoTy<ImageErrorInfo>);
+ERR_DEFINE_ERROR_INFO(ImageError, ImageErrorInfo);
 
 /**
  * @brief HDR image processor with exclusive ownership semantics.
