@@ -4,8 +4,7 @@
 
 #include <tuple>
 
-#include <error_info.h>
-#include <errty.h>
+#include <err_utils.h>
 #include <jpeg_compressor.h>
 #include <jpeg_decompressor.h>
 #include <ncnm.h>
@@ -43,20 +42,7 @@ enum class BlenderError {
   BlendFinishDecompressionError,
 };
 
-/**
- * @brief Structured error information for image operations.
- *
- * @details
- * Wraps a @ref BlenderError together with additional diagnostic
- * information such as contextual messages and error metadata.
- */
-using BlenderErrorInfo = err::ErrorInfo<BlenderError>;
-
-/**
- * @brief Verifies that @ref BlenderErrorInfo satisfies the required
- * error-info concept.
- */
-static_assert(topology::ErrorInfoTy<BlenderErrorInfo>);
+ERR_DEFINE_ERROR_INFO(BlenderError,BlenderErrorInfo);
 
 /**
  * @brief Image dimensions represented as width and height.
