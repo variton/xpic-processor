@@ -6,8 +6,7 @@
 #include <memory>
 #include <string>
 
-#include <error_info.h>
-#include <errty.h>
+#include <err_utils.h>
 #include <tl/expected.hpp>
 
 /**
@@ -49,12 +48,7 @@ enum class FileHandlerError {
   FileOpenError,
 };
 
-/**
- * @brief Structured error information for @ref FileHandler operations.
- */
-using FileHandlerErrorInfo = err::ErrorInfo<FileHandlerError>;
-
-static_assert(topology::ErrorInfoTy<FileHandlerErrorInfo>);
+ERR_DEFINE_ERROR_INFO(FileHandlerError, FileHandlerErrorInfo);
 
 /**
  * @brief RAII wrapper for an owned C @c FILE handle.

@@ -2,8 +2,8 @@
 #ifndef JPEG_DECODER_H
 #define JPEG_DECODER_H
 
-#include <jerr.h>
 #include <err_utils.h>
+#include <jerr.h>
 #include <jpeg_decompressor.h>
 #include <ncnm.h>
 #include <tl/expected.hpp>
