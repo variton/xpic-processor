@@ -2,8 +2,7 @@
 #ifndef JPEG_DECOMPRESSOR_H
 #define JPEG_DECOMPRESSOR_H
 
-#include <error_info.h>
-#include <errty.h>
+#include <err_utils.h>
 #include <jerr.h>
 #include <nc.h>
 #include <tl/expected.hpp>
@@ -43,20 +42,7 @@ enum class JpegDecompressorError {
   FinishDecompressionError
 };
 
-/**
- * @brief Error information type for JPEG decompressor operations.
- *
- * @details
- * Wraps a @ref JpegDecompressorError together with additional diagnostic
- * information such as error messages and contextual metadata.
- */
-using JpegDecompressorErrorInfo = err::ErrorInfo<JpegDecompressorError>;
-
-/**
- * @brief Verifies that @ref JpegDecompressorErrorInfo satisfies the expected
- * error-info concept requirements.
- */
-static_assert(topology::ErrorInfoTy<JpegDecompressorErrorInfo>);
+ERR_DEFINE_ERROR_INFO(JpegDecompressorError, JpegDecompressorErrorInfo);
 
 /**
  * @brief RAII wrapper for libjpeg decompression structures.
