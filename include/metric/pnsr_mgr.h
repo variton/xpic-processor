@@ -10,8 +10,7 @@
 #include <ncnm.h>
 #include <span>
 
-#include <error_info.h>
-#include <errty.h>
+#include <err_utils.h>
 #include <tl/expected.hpp>
 
 namespace metric {
@@ -28,13 +27,7 @@ enum class PSNRMgrError {
   SSENullError, /**< SSE computation returned or encountered a null state. */
 };
 
-/**
- * @brief Error information type used by PSNRMgr.
- */
-using PSNRMgrErrorInfo = err::ErrorInfo<PSNRMgrError>;
-
-static_assert(topology::ErrorInfoTy<PSNRMgrErrorInfo>);
-
+ERR_DEFINE_ERROR_INFO(PSNRMgrError, PSNRMgrErrorInfo);
 /**
  * @brief Computes Peak Signal-to-Noise Ratio between two image buffers.
  *
