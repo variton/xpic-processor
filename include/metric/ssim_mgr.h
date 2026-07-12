@@ -10,8 +10,7 @@
 #include <ncnm.h>
 #include <span>
 
-#include <error_info.h>
-#include <errty.h>
+#include <err_utils.h>
 #include <tl/expected.hpp>
 
 namespace metric {
@@ -28,12 +27,7 @@ enum class SSIMMgrError {
   LowValError, /**< Computed or input value is below the supported range. */
 };
 
-/**
- * @brief Error information type used by SSIMMgr.
- */
-using SSIMMgrErrorInfo = err::ErrorInfo<SSIMMgrError>;
-
-static_assert(topology::ErrorInfoTy<SSIMMgrErrorInfo>);
+ERR_DEFINE_ERROR_INFO(SSIMMgrError, SSIMMgrErrorInfo);
 
 /**
  * @brief Computes Structural Similarity Index Measure between two image
