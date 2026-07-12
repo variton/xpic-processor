@@ -42,7 +42,7 @@ enum class BlenderError {
   BlendFinishDecompressionError,
 };
 
-ERR_DEFINE_ERROR_INFO(BlenderError,BlenderErrorInfo);
+ERR_DEFINE_ERROR_INFO(BlenderError, BlenderErrorInfo);
 
 /**
  * @brief Image dimensions represented as width and height.
