@@ -6,8 +6,7 @@
 #include <cstddef>
 #include <string>
 
-#include <error_info.h>
-#include <errty.h>
+#include <err_utils.h>
 #include <ncnm.h>
 #include <tl/expected.hpp>
 
@@ -34,12 +33,7 @@ enum class ArgParserError {
   ParseError
 };
 
-/**
- * @brief Structured error information for argument parsing.
- */
-using ArgParserErrorInfo = err::ErrorInfo<ArgParserError>;
-
-static_assert(topology::ErrorInfoTy<ArgParserErrorInfo>);
+ERR_DEFINE_ERROR_INFO(ArgParserError, ArgParserErrorInfo);
 
 /**
  * @brief Parsed command-line options.
