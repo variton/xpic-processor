@@ -32,3 +32,5 @@ add_subdirectory(src)
 include(Coverage)
 #tool for documentation
 include(Doxygen)
+#benchmark for xpic quality
+add_subdirectory(benchmark)
