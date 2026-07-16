@@ -5,8 +5,8 @@
 #include <string>
 
 #include <cache.h>
-#include <error_info.h>
-#include <errty.h>
+#include <err_utils.h>
+
 #include <ncnm.h>
 #include <tl/expected.hpp>
 
@@ -30,12 +30,7 @@ enum class EnvMgrError {
   InvalidEnvVarType,
 };
 
-/**
- * @brief Structured error information for @ref EnvMgr operations.
- */
-using EnvMgrErrorInfo = err::ErrorInfo<EnvMgrError>;
-
-static_assert(topology::ErrorInfoTy<EnvMgrErrorInfo>);
+ERR_DEFINE_ERROR_INFO(EnvMgrError,EnvMgrErrorInfo);
 
 /**
  * @brief Singleton manager for reading and caching environment variables.
