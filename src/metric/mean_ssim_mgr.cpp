@@ -13,7 +13,7 @@ MeanSSIMMgr::MeanSSIMMgr(std::span<const std::uint8_t> original,
     : original_{original}, watermarked_{watermarked} {}
 
 MeanSSIMMgr::~MeanSSIMMgr() = default;
-//todo check how the errors are propagated
+// todo check how the errors are propagated
 tl::expected<double, MeanSSIMMgrErrorInfo>
 MeanSSIMMgr::computeMeanSSIM(int width, int height, int components) noexcept {
 
@@ -66,7 +66,7 @@ MeanSSIMMgr::MtComputeMeanSSIM(int width, int height, int components) noexcept {
 
   for (const auto &result : channel_results) {
     if (!result.has_value()) {
-      return err::propagate(result,MeanSSIMMgrError::MeanSSIMChannelError);
+      return err::propagate(result, MeanSSIMMgrError::MeanSSIMChannelError);
     }
   }
 
