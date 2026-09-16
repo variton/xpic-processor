@@ -27,8 +27,8 @@ class Mgr : public Default<Mgr> {
 public:
   /**
    * @brief Constructs a metric manager.
-   * @param original Original image data.
-   * @param watermarked Watermarked image data.
+   * @param original Original image data [flat buffer].
+   * @param watermarked Watermarked image data [flat buffer].
    * @param width Image width in pixels.
    * @param height Image height in pixels.
    */
