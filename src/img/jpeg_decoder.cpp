@@ -16,8 +16,9 @@ JpegDecoder::decode(JpegDecompressor &decompressor) noexcept {
 
   auto &cinfo = decompressor.cinfo();
 
-  if (setjmp(err_.setjmp_buf))
-    return propagate_err(err_, JpegDecoderError::JpegDecodeError,
+  auto &error = decompressor.err();
+  if (setjmp(error.setjmp_buf))
+    return propagate_err(error, JpegDecoderError::JpegDecodeError,
                          "JPEG decode error");
 
   while (cinfo.output_scanline < cinfo.output_height) {
@@ -28,6 +29,10 @@ JpegDecoder::decode(JpegDecompressor &decompressor) noexcept {
   }
 
   return {};
+}
+
+std::span<std::uint8_t> JpegDecoder::pixels() noexcept {
+  return {pixels_.get(), size_pixels_buffer_};
 }
 
 std::span<const std::uint8_t> JpegDecoder::pixels() const noexcept {

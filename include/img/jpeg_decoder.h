@@ -5,7 +5,7 @@
 #include <err_utils.h>
 #include <jerr.h>
 #include <jpeg_decompressor.h>
-#include <ncnm.h>
+#include <nc.h>
 #include <tl/expected.hpp>
 
 #include <cstdint>
@@ -19,7 +19,7 @@ namespace img {
  *
  * @tparam T Derived type using CRTP-style inheritance.
  */
-template <typename T> using Default = core::NCNM<T>;
+template <typename T> using Movable = core::NC<T>;
 
 /**
  * @brief JPEG decoder error categories.
@@ -43,7 +43,7 @@ ERR_DEFINE_ERROR_INFO(JpegDecoderError, JpegDecoderErrorInfo);
  *
  * Copy and move operations are disabled via @c Default.
  */
-class JpegDecoder : public Default<JpegDecoder> {
+class JpegDecoder : public Movable<JpegDecoder> {
 
 public:
   /**
@@ -77,6 +77,9 @@ public:
    * @return Read-only span over the complete pixel buffer.
    */
   std::span<const std::uint8_t> pixels() const noexcept;
+
+  /** @brief Access the mutable decoded pixel buffer. */
+  std::span<std::uint8_t> pixels() noexcept;
 
 private:
   /** @brief Number of bytes allocated for decoded pixels. */

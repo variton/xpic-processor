@@ -170,3 +170,9 @@ set_tests_properties(test_channel_mgr PROPERTIES
   ENVIRONMENT "RC=${TRC};OUT=${TOUT}"
 )
 
+
+add_executable(test_pixel_mgr test_pixel_mgr.cpp)
+target_link_libraries(test_pixel_mgr PRIVATE img fio doctest::doctest
+                      $<$<CONFIG:Debug>:--coverage>)
+add_test(NAME test_pixel_mgr COMMAND $<TARGET_FILE:test_pixel_mgr>)
+set_tests_properties(test_pixel_mgr PROPERTIES ENVIRONMENT "RC=${TRC}")
