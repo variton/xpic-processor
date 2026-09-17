@@ -3,6 +3,7 @@
 #define PIXEL_MGR_H
 
 #include <filehandler.h>
+#include <inputimg.h>
 #include <jpeg_decoder.h>
 #include <memory>
 #include <ncnm.h>
@@ -57,7 +58,10 @@ public:
    */
   [[nodiscard]] std::span<uint8_t> pixels() const noexcept;
 
+  [[nodiscard]] InputImg img() const noexcept;
+
 private:
+  InputImg input_img;
   std::string filepath_;
   std::unique_ptr<JpegDecoder> decoder_;
 };

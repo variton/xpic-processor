@@ -6,6 +6,7 @@ PixelMgr::PixelMgr(std::string_view filepath) noexcept : filepath_(filepath) {}
 
 tl::expected<void, PixelMgrErrorInfo> PixelMgr::init() noexcept {
   decoder_.reset();
+  input_img = InputImg{};
 
   auto file = fio::FileHandler::open(filepath_, "rb");
   if (!file)
@@ -24,8 +25,9 @@ tl::expected<void, PixelMgrErrorInfo> PixelMgr::init() noexcept {
                            started.error().message);
 
   const auto &cinfo = decompressor.cinfo();
+  const InputImg decoded_img{cinfo};
   auto decoder = std::make_unique<JpegDecoder>(
-      cinfo.output_width, cinfo.output_height, cinfo.output_components);
+      decoded_img.width, decoded_img.height, decoded_img.components);
 
   auto decoded = decoder->decode(decompressor);
   if (!decoded)
@@ -38,11 +40,14 @@ tl::expected<void, PixelMgrErrorInfo> PixelMgr::init() noexcept {
                            finished.error().message);
 
   decoder_ = std::move(decoder);
+  input_img = decoded_img;
   return {};
 }
 
 std::span<uint8_t> PixelMgr::pixels() const noexcept {
   return decoder_ ? decoder_->pixels() : std::span<uint8_t>{};
 }
+
+InputImg PixelMgr::img() const noexcept { return input_img; }
 
 } // namespace img
