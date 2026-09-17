@@ -3,9 +3,11 @@
 #define PIXEL_MGR_H
 
 #include <filehandler.h>
-#include <jpeg_decompressor.h>
+#include <jpeg_decoder.h>
+#include <memory>
 #include <ncnm.h>
 #include <span>
+#include <string>
 #include <string_view>
 
 namespace img {
@@ -25,12 +27,13 @@ class PixelMgr : public Default<PixelMgr> {
 public:
   explicit PixelMgr(std::string_view filepath) noexcept;
   tl::expected<void, PixelMgrErrorInfo> init() noexcept;
+  // Empty before successful initialization; valid until the next init() or
+  // destruction.
   std::span<uint8_t> pixels() const noexcept;
 
 private:
-  std::string_view filepath_;
-  fio::FileHandler filehdr_;
-  JpegDecompressor decompressor_;
+  std::string filepath_;
+  std::unique_ptr<JpegDecoder> decoder_;
 };
 
 } // namespace img
