@@ -5,12 +5,14 @@ add_executable(sequence
 
 target_include_directories(sequence PUBLIC
   $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/quality>
+  $<BUILD_INTERFACE:${CMAKE_INCLUDE_PATH}/img>
   $<BUILD_INTERFACE:${tcxx_SOURCE_DIR}/include/core>
   $<BUILD_INTERFACE:${tcxx_SOURCE_DIR}/include/obs>
   $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(sequence PRIVATE 
+target_link_libraries(sequence PRIVATE
+                      img
                       quality 
                       fmt::fmt)
 
