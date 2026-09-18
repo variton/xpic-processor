@@ -27,5 +27,6 @@ MILLI_CLOCK_RUNTIME_MAIN {
   if (!ret_computer_mean_ssim) fmt::println("{}",ret_computer_mean_ssim.error().message);
   clock();
   fmt::println("time elasped: {} ms", clock.elapsed());
+  fmt::println("mean ssim: {}", ret_computer_mean_ssim.value());
   return 0;
 }
