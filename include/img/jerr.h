@@ -43,7 +43,7 @@ struct JpegError : jpeg_error_mgr {
  * @warning This function performs a non-local jump using @c longjmp. The caller
  *          is expected to establish a matching @c setjmp context.
  */
-static void jpeg_error_exit(j_common_ptr cinfo) {
+inline void jpeg_error_exit(j_common_ptr cinfo) {
   auto *err = reinterpret_cast<JpegError *>(cinfo->err);
   (*cinfo->err->format_message)(cinfo, err->message);
   longjmp(err->setjmp_buf, 1);
