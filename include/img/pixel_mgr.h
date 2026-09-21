@@ -1,4 +1,3 @@
-
 #ifndef PIXEL_MGR_H
 #define PIXEL_MGR_H
 
@@ -13,51 +12,44 @@
 
 namespace img {
 
-template <typename T> using Default = core::NCNM<T>;
+template <typename T>
+using Default = core::NCNM<T>;
 
-/**
- * @brief Errors that may occur while initializing or decoding an image.
- */
+/** @brief Errors encountered while loading or decoding an image. */
 enum class PixelMgrError {
-  /** @brief The image file could not be opened. */
-  FileOpenInitError,
-
-  /** @brief The JPEG decompressor could not be initialized. */
-  DecompressorInitError,
-
-  /** @brief JPEG decompression failed. */
-  DecompressError,
+  FileOpenInitError,     ///< Failed to open the image file.
+  DecompressorInitError, ///< Failed to initialize the JPEG decompressor.
+  DecompressError,       ///< Failed to decode the JPEG image.
 };
 
 ERR_DEFINE_ERROR_INFO(PixelMgrError, PixelMgrErrorInfo);
 
-/**
- * @brief Manages loading and decoding pixel data from a JPEG file.
- */
+/** @brief Loads and decodes pixel data from a JPEG file. */
 class PixelMgr : public Default<PixelMgr> {
 public:
   /**
-   * @brief Constructs a pixel manager for the specified file.
+   * @brief Constructs a pixel manager.
    * @param filepath Path to the JPEG file.
    */
   explicit PixelMgr(std::string_view filepath) noexcept;
 
   /**
-   * @brief Opens and decodes the configured JPEG file.
-   * @return Success, or error information describing the failure.
+   * @brief Opens and decodes the JPEG file.
+   * @return Success or details of the encountered error.
    */
   [[nodiscard]] tl::expected<void, PixelMgrErrorInfo> init() noexcept;
 
   /**
    * @brief Returns the decoded pixel data.
-   * @return A view of the decoded pixels. Empty before successful
-   *         initialization.
-   *
-   * @note The returned view remains valid until the next call to init() or
-   *       until this object is destroyed.
+   * @return A pixel view, empty before successful initialization.
+   * @note The view is invalidated by init() or object destruction.
    */
   [[nodiscard]] std::span<uint8_t> pixels() const noexcept;
 
+  /**
+   * @brief Returns the decoded image description.
+   * @return The image description.
+   */
   [[nodiscard]] InputImg img() const noexcept;
 
 private:
