@@ -50,3 +50,15 @@ To generate a report from existing results without running the benchmark:
 ```bash
 ./percentiles.py --input=res.json --html=report.html
 ```
+
+## Machine details
+
+New benchmark runs save a JSON object with `metadata` and `results` fields.
+Metadata records CPU model, physical and logical core counts, CPUs allowed by
+process affinity, OS, architecture, start time (UTC), and the executed command.
+These details appear in the HTML report and remain available when using `--input`.
+CPU topology is detected from Linux `/proc/cpuinfo`; unavailable fields are
+reported as “Not recorded”. CPU utilization is not measured.
+
+Existing JSON result arrays remain supported. Their machine details are shown as
+“Not recorded”, rather than using the computer that later generates the report.

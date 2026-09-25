@@ -10,6 +10,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+from benchmark_metadata import collect_metadata
+
 
 def parse_results(text):
     number = r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?"
@@ -64,6 +66,7 @@ def main():
         ):
             parser.error("--log and --json must use different files")
 
+    metadata = collect_metadata(command) if args.json is not None else None
     status = 0
     with ExitStack() as stack:
         capture = (stack.enter_context(tempfile.TemporaryFile())
@@ -106,7 +109,8 @@ def main():
                 try:
                     capture.seek(0)
                     results = parse_results(capture.read().decode(errors="replace"))
-                    output = json.dumps(results, indent=2, allow_nan=False) + "\n"
+                    output = json.dumps({"metadata": metadata, "results": results},
+                                        indent=2, allow_nan=False) + "\n"
                     args.json.write_text(output)
                 except (OSError, ValueError) as error:
                     print(f"Error exporting results: {error}", file=sys.stderr)

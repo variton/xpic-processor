@@ -4,9 +4,10 @@ from datetime import datetime, timezone
 from html import escape
 import math
 import statistics
+import shlex
 
 
-def render_report(results, percentiles, source, command=None):
+def render_report(results, percentiles, source, command=None, metadata=None):
     times = [item['time_elapsed_ms'] for item in results]
     count = len(times)
     mean = statistics.mean(times)
@@ -71,7 +72,21 @@ def render_report(results, percentiles, source, command=None):
         rows += f'<tr><td>{i:03d}</td><td>{value:.3f}</td><td>{score_text}</td><td>{"Above p95" if value > percentiles["p95"] else "—"}</td></tr>'
     quality = (f'{statistics.mean(valid_scores):.6f} mean · {min(valid_scores):.6f} min · '
                f'{max(valid_scores):.6f} max · {len(valid_scores)}/{count} samples') if valid_scores else 'No SSIM values recorded'
-    provenance = ('Executed by this script' if command else 'User-provided benchmark command; execution metadata is not stored in the input JSON')
+    metadata = metadata or {}
+    recorded_command = metadata.get('command')
+    if (command is None and isinstance(recorded_command, list) and recorded_command
+            and all(isinstance(arg, str) for arg in recorded_command)):
+        command = shlex.join(recorded_command)
+    hardware = ''.join(
+        f'<dt>{label}</dt><dd>{escape(str(metadata[key])) if metadata.get(key) is not None else "Not recorded"}</dd>'
+        for key, label in [
+            ('cpu_model', 'CPU model'), ('physical_cores', 'Physical cores'),
+            ('logical_cpus', 'Logical CPUs'), ('affinity_logical_cpus', 'CPUs in affinity'),
+            ('os', 'Operating system'), ('architecture', 'Architecture'),
+            ('started_at_utc', 'Benchmark started'),
+        ]
+    )
+    provenance = ('Recorded execution command' if command else 'User-provided benchmark command; execution metadata is not stored in the input JSON')
     command = command or './run.py -xtimes=50 --json=res.json ../bin/mt-mean-ssim ../rc/ur.jpg ../rc/watermarked_ur.jpg'
     return f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -85,7 +100,7 @@ main{{max-width:1240px;margin:auto;padding:48px 28px}}header{{border-bottom:1px 
 <div class="cards">{cards}</div><div class="cards stats">{stats}</div>
 <div class="charts"><section><h2>01 // Sample timeline</h2>{chart}<small>Execution order · milliseconds · dashed amber line = p95 · hover for values</small></section><section><h2>02 // Timing distribution</h2>{histogram}<small>Equal-width bins · counts above bars · hover for ranges</small></section></div>
 <section><h2>03 // Image similarity</h2><p>{quality}</p><small>Values are reported by the benchmark. A rounded value of 1.0 alone does not establish that input files are identical.</small></section>
-<section><h2>04 // Benchmark context</h2><dl><dt>Results source</dt><dd>{escape(str(source))}</dd><dt>Report generated</dt><dd>{generated}</dd><dt>Command provenance</dt><dd>{provenance}</dd></dl><code>{escape(command)}</code><p>Sequential command invocations. The command above identifies the requested run count, benchmark binary, and inputs.</p><small>Hardware, build flags, thread count, environment, and benchmark execution timestamp are not recorded in the results file.</small></section>
+<section><h2>04 // Benchmark context</h2><dl><dt>Results source</dt><dd>{escape(str(source))}</dd><dt>Report generated</dt><dd>{generated}</dd><dt>Command provenance</dt><dd>{provenance}</dd>{hardware}</dl><code>{escape(command)}</code><p>Sequential command invocations. The command above identifies the requested run count, benchmark binary, and inputs.</p><small>CPU counts describe the topology visible to the operating system; affinity may restrict available CPUs. Unavailable or historical hardware details are marked “Not recorded”. CPU utilization, build flags, and application thread count are not measured.</small></section>
 <section><h2>05 // Methodology</h2><p>Percentiles use sorted execution times and linear interpolation at index (N − 1) × p / 100. P50 is the median; p95 describes the upper timing tail. All recorded timing samples are included; no warm-up removal or outlier filtering is applied.</p><p>Timing is the binary’s reported <code style="display:inline;padding:2px">time_elapsed_ms</code>, not process startup or overall wall-clock duration. Standard deviation is calculated over the full recorded population. With {count} samples, tail percentiles are descriptive estimates; no confidence interval is calculated.</p></section>
 <section><h2>06 // All samples</h2><div class="table-wrap"><table><thead><tr><th scope="col">Sample</th><th scope="col">Time (ms)</th><th scope="col">Mean SSIM</th><th scope="col">Timing note</th></tr></thead><tbody>{rows}</tbody></table></div></section>
 <footer>SELF-CONTAINED REPORT // No external fonts, scripts, or network requests.</footer>

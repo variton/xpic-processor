@@ -131,7 +131,15 @@ def main():
             if completed.returncode:
                 return (completed.returncode if completed.returncode > 0
                         else 128 - completed.returncode)
-        results = json.loads(results_file.read_text())
+        document = json.loads(results_file.read_text())
+        metadata = None
+        if isinstance(document, dict):
+            results = document.get("results")
+            metadata = document.get("metadata")
+            if metadata is not None and not isinstance(metadata, dict):
+                raise ValueError("metadata must be a JSON object")
+        else:
+            results = document
         percentiles = timing_percentiles(results)
         if args.input is None and len(results) != expected_count:
             raise ValueError(f"expected {expected_count} timing samples, received {len(results)}")
@@ -139,7 +147,7 @@ def main():
         for name, value in percentiles.items():
             print(f"{name}: {value:.3f} ms")
         command = None if args.input is not None else shlex.join(invocation)
-        args.html.write_text(render_report(results, percentiles, results_file, command),
+        args.html.write_text(render_report(results, percentiles, results_file, command, metadata),
                              encoding="utf-8")
         print(f"HTML report: {args.html.resolve()}")
     except (OSError, ValueError) as error:
