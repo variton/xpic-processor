@@ -16,3 +16,5 @@ reports/
 *.swm
 sample-blend-out.jpg
 .deps/
+*.json
+*.html
