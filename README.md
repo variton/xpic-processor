@@ -210,3 +210,14 @@ Recommended development workflow:
 Licensed under the MIT License.
 
 See `LICENSE` for details.
+
+## Benchmark HTML Report
+
+From the `benchmarking` directory, generate an HTML report from existing benchmark results:
+
+```bash
+./percentiles.py --input=res.json --html=report.html
+```
+
+Open `report.html` in a browser to view the Matrix-style report, including p50, p80, p90, and p95 execution times, timing charts, SSIM statistics, and individual samples.
+
