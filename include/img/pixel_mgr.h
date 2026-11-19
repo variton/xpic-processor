@@ -12,8 +12,7 @@
 
 namespace img {
 
-template <typename T>
-using Default = core::NCNM<T>;
+template <typename T> using Default = core::NCNM<T>;
 
 /** @brief Errors encountered while loading or decoding an image. */
 enum class PixelMgrError {
