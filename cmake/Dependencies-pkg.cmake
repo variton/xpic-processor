@@ -1,4 +1,13 @@
 
+find_package(OpenCV QUIET COMPONENTS core imgcodecs imgproc)
+
+if(NOT OpenCV_FOUND)
+    message(FATAL_ERROR
+        "OpenCV with core, imgcodecs, and imgproc was not found.\n"
+        "On Debian/Ubuntu, run: sudo apt install libopencv-dev"
+    )
+endif()
+
 find_package(CLI11 CONFIG)
 
 if(NOT CLI11_FOUND)
